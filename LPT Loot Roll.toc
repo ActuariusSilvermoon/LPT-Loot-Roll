@@ -1,0 +1,19 @@
+## Interface: 90200
+## Title: LPT Loot Roll
+## Author: Actuarius
+## Version: 2.1.6
+## SavedVariables: llrSettings, rollHistoryDB
+
+core\init.lua
+locale\enUS.lua
+core\variables.lua
+core\functions.lua
+core\uiFactory.lua
+core\popups.lua
+core\eventFunctions.lua
+main.lua
+interface\config.lua
+interface\userWindow.lua
+interface\leaderWindow.lua
+interface\itemListWindow.lua
+external\tukuiAddonSkin.lua
