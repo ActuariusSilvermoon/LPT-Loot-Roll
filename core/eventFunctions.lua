@@ -77,6 +77,8 @@ variables.events =
 
         item:ContinueOnItemLoad(function()
             functions.addToDebugHistory("Raid warning item is loaded.");
+            functions.resetTooltip();
+
             local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = GetItemInfo(msg);
             
             --Stop if no item link is found.
@@ -89,6 +91,7 @@ variables.events =
 
             local isPet = itemClassID == 15 and itemSubClassID == 2 or nil;
 
+            LPTLootRoll_ToolTip:SetHyperlink(link);
             local isToken = 
                 (
                     itemSubType == "Context Token" or 
