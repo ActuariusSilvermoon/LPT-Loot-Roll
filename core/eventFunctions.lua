@@ -67,139 +67,169 @@ variables.events =
         if not functions.isLeaderOrAssistWithMode(author) then
             return;
         end
-        
-        local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = GetItemInfo(msg);
-        
-        --Stop if no item link is found.
-        if link == nil then
+
+        local item = Item:CreateFromItemLink(msg);
+
+        if item:IsItemEmpty() then
+            functions.addToDebugHistory("Found no item in raid warning.");
             return;
         end
 
-        local isPet = itemClassID == 15 and itemSubClassID == 2 or nil;
-
-        functions.resetTooltip();
-        LPTLootRoll_ToolTip:SetHyperlink(link);
-
-        local isToken = 
-            (
-                itemSubType == "Context Token" or 
-                (
-                    itemSubType == "Junk" and
-                    functions.tooltipHasString("Use: Create a soulbound ")
-                 )
-            );
-
-        --If not relevant items then stop.
-        if not 
-        (
-            itemClassID == 4 or --Armor
-            itemClassID == 2 or --Weapon
-            isPet 			 or	--Pet
-            isToken             --Item Token
-        )
-        then
-            return;
-        end
-
-        --Check for pet
-        local usabilityVar = isPet;
-        
-        --Check for red text in tooltip.
-        if usabilityVar == nil then
-            functions.resetTooltip();
-            LPTLootRoll_ToolTip:SetHyperlink(link);
-
-            if functions.tooltipHasRedText() then
-                usabilityVar = false;
-            --If no red text and is token.
-            elseif isToken then
-                usabilityVar = true;
-            end
-        end
-
-        --Check for special item slots.
-        if usabilityVar == nil then
-            usabilityVar = 
-                ( 
-                    --Check if it item is a cloak.
-                    itemEquipLoc == "INVTYPE_CLOAK" or 
-                    --Check if it is a ring.
-                    itemEquipLoc == "INVTYPE_FINGER" or 
-                    --Check if it is a neck.
-                    itemEquipLoc == "INVTYPE_NECK" or 
-                    --Check if item is an off-hand, and if player "should" use off-hands.
-                    (itemEquipLoc == "INVTYPE_HOLDABLE" and variables.classArray[variables.playerClassId][itemEquipLoc])
-                ) 
-                and 
-                    true 
-                or 
-                    nil;
-        end
-
-        --Check for traits of the item (correct stats and equippable, or if transmoggable).
-        if usabilityVar == nil then
-            local itemValues = functions.getItemValues(link);
-            local usableStats = functions.usableStats(itemValues);
-            local anyStats = itemValues.agility or itemValues.strength or itemValues.intellect;
+        item:ContinueOnItemLoad(function()
+            functions.addToDebugHistory("Raid warning item is loaded.");
+            local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = GetItemInfo(msg);
             
-            usabilityVar = 
-                ( 
-                    --Check if it is a trinket, if the trinket has any main stats then use that to detect if usable.
-                    (itemEquipLoc == "INVTYPE_TRINKET" and ((anyStats and usableStats) or not anyStats)) or
-                    --Check if item is an equippable weapon/armor piece with correct stats.
-                    (variables.classArray[variables.playerClassId][itemClassID][itemSubClassID] and usableStats)
-                ) 
-                and 
-                    true 
-                or 
-                    nil;
-        end
+            --Stop if no item link is found.
+            if link == nil then
+                functions.addToDebugHistory("Found no link.");
+                return;
+            end
 
-        --Check if item is a collectable transmog piece.
-        if usabilityVar == nil then
-            usabilityVar = functions.usableMog(link);
-        end
+            functions.addToDebugHistory("Item: " .. link);
 
-        local ownerName = select(3, msg:find("(.+) (- .+)"));
-        local owner = 
+            local isPet = itemClassID == 15 and itemSubClassID == 2 or nil;
+
+            local isToken = 
+                (
+                    itemSubType == "Context Token" or 
+                    (
+                        itemSubType == "Junk" and
+                        functions.tooltipHasString("Use: Create a soulbound ")
+                    )
+                );
+
+            --If not relevant items then stop.
+            if not 
             (
-                UnitPlayerOrPetInRaid(ownerName) 
-                and 
+                itemClassID == 4 or --Armor
+                itemClassID == 2 or --Weapon
+                isPet 			 or	--Pet
+                isToken             --Item Token
+            )
+            then
+                functions.addToDebugHistory("Not relevant item.");
+                return;
+            end
+
+            --Check for pet
+            local usabilityVar = isPet;
+            
+            --Check for red text in tooltip.
+            if usabilityVar == nil then
+                functions.resetTooltip();
+                LPTLootRoll_ToolTip:SetHyperlink(link);
+
+                if functions.tooltipHasRedText() then
+                    functions.addToDebugHistory("Tooltip contains red text.");
+                    usabilityVar = false;
+                --If no red text and is token.
+                elseif isToken then
+                    functions.addToDebugHistory("No red text and is token.");
+                    usabilityVar = true;
+                end
+            end
+
+            --Check for special item slots.
+            if usabilityVar == nil then
+                usabilityVar = 
+                    ( 
+                        --Check if it item is a cloak.
+                        itemEquipLoc == "INVTYPE_CLOAK" or 
+                        --Check if it is a ring.
+                        itemEquipLoc == "INVTYPE_FINGER" or 
+                        --Check if it is a neck.
+                        itemEquipLoc == "INVTYPE_NECK" or 
+                        --Check if item is an off-hand, and if player "should" use off-hands.
+                        (itemEquipLoc == "INVTYPE_HOLDABLE" and variables.classArray[variables.playerClassId][itemEquipLoc])
+                    ) 
+                    and 
+                        true 
+                    or 
+                        nil;
+                
+                if usabilityVar then
+                    functions.addToDebugHistory("Item is for cloak/finger/neck or is holdable and player class can normally use off-hands.");
+                end
+            end
+
+            --Check for traits of the item (correct stats and equippable).
+            if usabilityVar == nil then
+                local itemValues = functions.getItemValues(link);
+                local usableStats = functions.usableStats(itemValues);
+                local anyStats = itemValues.agility or itemValues.strength or itemValues.intellect;
+                
+                usabilityVar = 
+                    ( 
+                        --Check if it is a trinket, if the trinket has any main stats then use that to detect if usable.
+                        (itemEquipLoc == "INVTYPE_TRINKET" and ((anyStats and usableStats) or not anyStats)) or
+                        --Check if item is an equippable weapon/armor piece with correct stats.
+                        (variables.classArray[variables.playerClassId][itemClassID][itemSubClassID] and usableStats)
+                    ) 
+                    and 
+                        true 
+                    or 
+                        nil;
+                
+                if usabilityVar then
+                    functions.addToDebugHistory("Item is either trinket with no stats or correct stats, or of correct item type with correct stats.");
+                end
+            end
+
+            --Check if item is a collectable transmog piece.
+            if usabilityVar == nil then
+                usabilityVar = functions.usableMog(link);
+
+                if usabilityVar then
+                    functions.addToDebugHistory("Item has collectable transmog.");
+                end
+            end
+
+            local ownerName = select(3, msg:find("(.+) (- .+)"));
+            local owner = 
+                (
+                    UnitPlayerOrPetInRaid(ownerName) 
+                    and 
+                        {
+                            name = ownerName,
+                            color = functions.getClassColor(ownerName)
+                        }
+                    or 
+                        nil
+                );
+
+            if usabilityVar then
+                C_ChatInfo.SendAddonMessage("LPTLootRoll", variables.itemPrefixKey .. "-" .. variables.itemUsableKey, "RAID");
+            end
+
+            functions.addToDebugHistory(usabilityVar and "Item is usable." or "Item is not usable.");
+
+            if UnitIsGroupLeader("player") or llrSettings.leadMode then
+                functions.historyLengthControl();
+
+                --Insert the new item into the rollhistory array.
+                tinsert(
+                    variables.rollHistory, 
+                    1, 
                     {
-                        name = ownerName,
-                        color = functions.getClassColor(ownerName)
+                        item 		     = link,
+                        mainList 	     = {},
+                        offList 	     = {},
+                        mogList 	     = {},
+                        otherList        = {},
+                        distributed      = false,
+                        owner            = owner,
+                        potentialRollers = {}
                     }
-                or 
-                    nil
-            );
+                );
+                functions.addToDebugHistory("Item has been added to rollHistory table.");
 
-        if usabilityVar then
-            C_ChatInfo.SendAddonMessage("LPTLootRoll", variables.itemPrefixKey .. "-" .. variables.itemUsableKey, "RAID");
-        end
-
-        if UnitIsGroupLeader("player") or llrSettings.leadMode then
-            functions.historyLengthControl();
-
-            --Insert the new item into the rollhistory array.
-            tinsert(
-                variables.rollHistory, 
-                1, 
-                {
-                    item 		     = link,
-                    mainList 	     = {},
-                    offList 	     = {},
-                    mogList 	     = {},
-                    otherList        = {},
-                    distributed      = false,
-                    owner            = owner,
-                    potentialRollers = {}
-                }
-            );
-
-            functions.leaderEvent(usabilityVar);
-        elseif usabilityVar then
-            functions.userEvent(link, owner);
-        end
+                functions.leaderEvent(usabilityVar);
+                functions.addToDebugHistory("Leader event has been called.");
+            elseif usabilityVar then
+                functions.userEvent(link, owner);
+                functions.addToDebugHistory("User event has been called.");
+            end
+        end)
     end,
     ["CHAT_MSG_SYSTEM"] = 
     function(...)
@@ -240,6 +270,8 @@ variables.events =
 		else
 			roll = rollMax;
         end
+        
+        functions.addToDebugHistory("Roll " .. rollType .. " detected from player " .. author .. ".");
         
 		--Make sure the user has not already rolled.
 		if #determinedArray > 0 then
@@ -284,7 +316,17 @@ variables.events =
         local name, _ = strsplit("-", author);
 
         if UnitPlayerOrPetInRaid(name) then
-            functions.registerItem(name, msg);
+            local item = Item:CreateFromItemLink(msg);
+
+            if item:IsItemEmpty() then
+                functions.addToDebugHistory("Found no item in whisper message.");
+                return;
+            end
+    
+            item:ContinueOnItemLoad(function()
+                functions.registerItem(name, msg);
+                functions.addToDebugHistory("Item is loaded and registered in loot announcer.");
+            end);
         end
     end,
     ["CHAT_MSG_ADDON"] =

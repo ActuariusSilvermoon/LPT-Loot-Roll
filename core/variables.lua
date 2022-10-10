@@ -12,6 +12,7 @@ variables.prefixStatus = C_ChatInfo.RegisterAddonMessagePrefix("LPTLootRoll");
 variables.rollHistory = {};
 variables.itemsToRoll = {};
 variables.tradeableItemsQueue = {};
+variables.debugHistory = {};
 _, variables.playerClass, variables.playerClassId = UnitClass("player");
 variables.playerName = UnitName("player");
 variables.maxRollValue = 9999;
@@ -79,6 +80,14 @@ variables.commandArray =
 				functions.printCommands();
 			end,
 		description = locale.commandArrayHelpDescription
+	},
+	[locale.commandArrayDebugTitle] =
+	{
+		func = 
+			function()
+				functions.printDebugHistory();
+			end,
+		description = locale.commandArrayDebugDescription
 	}
 };
 

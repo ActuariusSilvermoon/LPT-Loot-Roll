@@ -39,6 +39,8 @@ locale.commandArrayConfigTitle = "config";
 locale.commandArrayConfigDescription = "Reset position of windows.";
 locale.commandArrayHelpTitle = "help";
 locale.commandArrayHelpDescription = "Open the config menu.";
+locale.commandArrayDebugTitle = "debug";
+locale.commandArrayDebugDescription = "Toggle debug mode."
 
 
 -----------------------

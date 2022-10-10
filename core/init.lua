@@ -32,6 +32,15 @@ loadFrame:SetScript("OnEvent",
 				llrSettings = {};
 			end
 			
+			--History database control.
+			if not rollHistoryDB then 
+				rollHistoryDB = {};
+			end
+			
+			if not rollHistoryDB.rollHistory then
+				rollHistoryDB.rollHistory = {};
+			end
+
 			--Booleans.
 			if not llrSettings.leadMode then
 				llrSettings.leadMode = false;
@@ -101,15 +110,6 @@ loadFrame:SetScript("OnEvent",
 			--Strings.
 			if not llrSettings.masterLooter then
 				llrSettings.masterLooter = "";
-			end
-			
-			--History database control.
-			if not rollHistoryDB then 
-				rollHistoryDB = {};
-			end
-			
-			if not rollHistoryDB.rollHistory then
-				rollHistoryDB.rollHistory = {};
 			end
 			
 			--Save mode binding.

@@ -266,6 +266,7 @@ function functions.usableStats(stats)
 	return agilityUsage or strengthUsage or intellectUsage;
 end
 
+--Function to reset LPT tooltip.
 function functions.resetTooltip()
 	for i = 1, LPTLootRoll_ToolTip:NumLines() or 0 do 
 		local left = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextLeft" .. i);
@@ -339,4 +340,26 @@ end
 --Function for checking if a player is the leader of a group, or if the player is assist and assistmode has been enabled.
 function functions.isLeaderOrAssistWithMode(player)
 	return UnitIsGroupLeader(player) or (llrSettings.assistMode and UnitIsGroupAssistant(player));
+end
+
+--Function for adding data to log.
+function functions.addToDebugHistory(input)
+	while #variables.debugHistory >= 50 do
+		tremove(variables.debugHistory, 1);
+	end
+	
+	tinsert(
+		variables.debugHistory,
+		{
+			date("%H:%M:%S"),
+			input
+		}
+	)
+end
+
+--Function for printing debug history.
+function functions.printDebugHistory()
+	for i, v in pairs(variables.debugHistory) do
+		functions.printOut(v[1] .. ": " .. v[2]);
+	end
 end

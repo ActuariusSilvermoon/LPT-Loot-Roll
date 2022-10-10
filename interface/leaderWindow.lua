@@ -350,8 +350,8 @@ function functions.resetItemAndRollHistory()
 
 	LPTLootRoll_LeaderWindow.historyButtonFrame.pageNumber:SetText("");
 	LPTLootRoll_LeaderWindow.itemButton:SetNormalTexture(nil);
-	LPTLootRoll_NextHistoryPage:SetEnabled(false);
-	LPTLootRoll_PreviousHistoryPage:SetEnabled(false);
+	LPTLootRoll_LeaderWindow.historyButtonFrame.nextHistoryPage:SetEnabled(false);
+	LPTLootRoll_LeaderWindow.historyButtonFrame.previousHistoryPage:SetEnabled(false);
 end
 
 --Function for starting the leader window upon a new item drop.
