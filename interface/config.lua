@@ -12,8 +12,8 @@ local LPTLootRoll_ConfigWindow = CreateFrame("FRAME", "LPTLootRoll_Config", UIPa
 local loadFrame = CreateFrame("FRAME");
 
 --Add config to standard wow interface window.
-LPTLootRoll_ConfigWindow.name = "LPT Loot Roll";
-InterfaceOptions_AddCategory(LPTLootRoll_ConfigWindow);
+local category = Settings.RegisterCanvasLayoutCategory(LPTLootRoll_ConfigWindow, "LPT Loot Roll");
+Settings.RegisterAddOnCategory(category);
 
 
 -----------------------
@@ -43,13 +43,13 @@ local function saveData()
 	if not variables.addonLoaded then 
 		return;
 	end
-	
+
 	local masterLooter			  = LPTLootRoll_ConfigWindow.masterLooterFrame.editBox:GetText();
 	local mainRoll   			  = LPTLootRoll_ConfigWindow.mainSettingFrame.editBox:GetNumber();
 	local offRoll   			  = LPTLootRoll_ConfigWindow.offSettingFrame.editBox:GetNumber();
 	local mogRoll 	  		  	  = LPTLootRoll_ConfigWindow.mogSettingFrame.editBox:GetNumber();
 	local historyLength 		  = LPTLootRoll_ConfigWindow.historySettingFrame.editBox:GetNumber();
-	
+
 	local leadMode   			  = _G["LPTLootRoll_LeadMode"]:GetChecked();
 	local scrollMode   			  = _G["LPTLootRoll_ScrollMode"]:GetChecked();
 	local saveMode   			  = _G["LPTLootRoll_SaveMode"]:GetChecked();
@@ -59,7 +59,7 @@ local function saveData()
 	local whisperListener 		  = _G["LPTLootRoll_WhisperListener"]:GetChecked();
 	local masterLooterMode 		  = _G["LPTLootRoll_MasterLooterMode"]:GetChecked();
 	local whisperNotificationMode = _G["LPTLootRoll_WhisperNotificationMode"]:GetChecked();
-	
+
 	if
 		mainRoll 	  == offRoll or 
 		mainRoll 	  == mogRoll or 
@@ -80,7 +80,7 @@ local function saveData()
 	llrSettings.mogRoll 	  	 		= mogRoll;
 	llrSettings.historyLength 	 		= historyLength;
 	llrSettings.masterLooter 	 		= masterLooter;
-	
+
 	llrSettings.leadMode 	  	 		= leadMode;
 	llrSettings.scrollMode 	  	 		= scrollMode;
 	llrSettings.saveMode 	  	 		= saveMode;
@@ -90,7 +90,7 @@ local function saveData()
 	llrSettings.whisperListener  		= whisperListener;
 	llrSettings.masterLooterMode 		= masterLooterMode;
 	llrSettings.whisperNotificationMode = whisperNotificationMode;
-	
+
 	rollHistoryMode();
 	functions.controlRollListener();
 	functions.historyLengthControl();
@@ -104,10 +104,10 @@ local function shareSettings()
 	if not IsShiftKeyDown() then
 		return;
 	end
-	
+
 	local msg = "[LPTLootRoll: " .. variables.playerName .. " - " .. llrSettings.mainRoll .. "-" .. llrSettings.offRoll .. "-" .. llrSettings.mogRoll .. "]";
 	local editbox = GetCurrentKeyBoardFocus();
-	
+
 	if editbox then
 		editbox:Insert(msg);
 	end
@@ -124,7 +124,7 @@ local function setValuesToDefault()
 	LPTLootRoll_ConfigWindow.userScaleSlider:SetValue(1);
 	LPTLootRoll_ConfigWindow.leaderScaleSlider:SetValue(1);
 	LPTLootRoll_ConfigWindow.itemListScaleSlider:SetValue(1);
-	
+
 	_G["LPTLootRoll_LeadMode"]:SetChecked(false);
 	_G["LPTLootRoll_ScrollMode"]:SetChecked(false);
 	_G["LPTLootRoll_SaveMode"]:SetChecked(false);
@@ -220,15 +220,18 @@ LPTLootRoll_ConfigWindow.leaderScaleSlider:SetScript("OnValueChanged",
 	end
 );
 
-LPTLootRoll_ConfigWindow:SetScript("OnShow", 
-	function(self) 
+LPTLootRoll_ConfigWindow:Hide();
+LPTLootRoll_ConfigWindow:SetScript("OnShow",
+	function(self)
 		functions.updateConfigWindow();
 	end
 );
 
-LPTLootRoll_ConfigWindow.default = function(self) setValuesToDefault() end;
-LPTLootRoll_ConfigWindow.okay 	 = function(self) saveData() end;
-LPTLootRoll_ConfigWindow:Hide();
+LPTLootRoll_ConfigWindow:SetScript("OnHide",
+	function(self)
+		saveData();
+	end
+);
 
 --Edit history editbox to have a max of two digits.
 LPTLootRoll_ConfigWindow.historySettingFrame.editBox:SetMaxLetters(2);
@@ -262,10 +265,10 @@ LPTLootRoll_ConfigWindow.resetPosition = functions.startButton(LPTLootRoll_Confi
 
 --Updating the config windows values.
 function functions.updateConfigWindow()
-	if not variables.addonLoaded then 
+	if not variables.addonLoaded then
 		return;
 	end
-	
+
 	LPTLootRoll_ConfigWindow.mainSettingFrame.editBox:SetNumber(llrSettings.mainRoll);
 	LPTLootRoll_ConfigWindow.offSettingFrame.editBox:SetNumber(llrSettings.offRoll);
 	LPTLootRoll_ConfigWindow.mogSettingFrame.editBox:SetNumber(llrSettings.mogRoll);
@@ -285,4 +288,9 @@ function functions.updateConfigWindow()
 	_G["LPTLootRoll_WhisperListener"]:SetChecked(llrSettings.whisperListener);
 	_G["LPTLootRoll_MasterLooterMode"]:SetChecked(llrSettings.masterLooterMode);
 	_G["LPTLootRoll_WhisperNotificationMode"]:SetChecked(llrSettings.whisperNotificationMode);
+end
+
+--Function for showing the config window.
+function functions.toggleConfig()
+	Settings.OpenToCategory(category:GetID());
 end

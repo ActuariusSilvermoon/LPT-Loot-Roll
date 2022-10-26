@@ -40,7 +40,7 @@ locale.commandArrayConfigDescription = "Reset position of windows.";
 locale.commandArrayHelpTitle = "help";
 locale.commandArrayHelpDescription = "Open the config menu.";
 locale.commandArrayDebugTitle = "debug";
-locale.commandArrayDebugDescription = "Toggle debug mode."
+locale.commandArrayDebugDescription = "Print debug information."
 
 
 -----------------------
@@ -126,7 +126,7 @@ locale.saveModeDescription = "If checked, roll/loot history will be kept between
 locale.eventModeTitle = "Enable constant roll listener.";
 locale.eventModeDescription = "If checked, the addon will ALWAYS listen for rolls even when the leader window is hidden.";
 locale.assistModeTitle = "Enable assist loot distribution.";
-locale.assistModeDescription = "If checked, the addon will allow loot to be distributed my raid assists, this is also required if a raid assist is going to be the master looter.";
+locale.assistModeDescription = "If checked, the addon will allow loot to be distributed by raid assists, this is also required if a raid assist is going to be the master looter.";
 locale.lootListenerTitle = "Enable tradeable loot listener.";
 locale.lootListenerDescription = "If checked, a pop up window will show upon looting a tradeable item. Accepting the pop up will send the item in a whisper to master looter (defaulted as raid leader).";
 locale.whisperListenerTitle = "Enable whisper listener.";

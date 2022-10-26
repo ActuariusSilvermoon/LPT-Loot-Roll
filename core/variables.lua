@@ -91,7 +91,7 @@ variables.commandArray =
 	}
 };
 
-variables.classArray = 
+variables.classArray =
 {
 	[1] = 				  -- Warrior
 	{
@@ -513,4 +513,39 @@ variables.classArray =
 		},
 		["INVTYPE_HOLDABLE"] = false,
 	},
+	[13] = 				  -- Evoker
+	{
+		[4] = 			  -- Armor Class Type
+		{
+			[1] = false,  -- Cloth Armor 
+			[2] = false,  -- Leather Armor
+			[3] = true,   -- Mail Armor
+			[4] = false,  -- Plate Armor
+			[6] = false,  -- Shield Armor
+		},
+		[2] = 			  -- Weapons Class Type
+		{
+			[0]  = true,  -- One-Handed Axes
+			[1]  = true,  -- Two-Handed Axes
+			[2]  = false, -- Bows
+			[3]  = false, -- Guns
+			[4]  = true,  -- One-Handed Maces
+			[5]  = true,  -- Two-Handed Maces
+			[6]  = false, -- Polearms
+			[7]  = true,  -- One-Handed Swords
+			[8]  = true,  -- Two-Handed Swords
+			[9]  = false, -- Warglaives
+			[10] = true,  -- Staves
+			[13] = true,  -- Fist Weapons
+			[15] = true,  -- Daggers
+			[18] = false, -- Crossbows
+			[19] = false, -- Wands
+		},
+		stats = {
+			agility 	= false,
+			strength 	= false,
+			intellect 	= true
+		},
+		["INVTYPE_HOLDABLE"] = true,
+	}
 };

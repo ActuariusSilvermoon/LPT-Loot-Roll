@@ -10,7 +10,7 @@ local locale = namespace.locale;
 
 --Clean up the trade time remaining string so that it can be used cross locales.
 --As seen in the RCLootConcil2 addon (https://github.com/evil-morfar/RCLootCouncil2).
-local trimmedString = escapePatternSymbols(BIND_TRADE_TIME_REMAINING):gsub("%%%%s", "%(%.%+%)"); 
+local trimmedString = escapePatternSymbols(BIND_TRADE_TIME_REMAINING):gsub("%%%%s", "%(%.%+%)");
 
 -----------------------
 ------EVENT TABLE------
@@ -27,13 +27,13 @@ variables.events =
             return;
         end
 
-        C_Timer.After(2, 
+        C_Timer.After(2,
             function()
-                for bag = 0, NUM_BAG_SLOTS do
+                for bag = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
                     for slot = 1, GetContainerNumSlots(bag) do
                         local bagLink = GetContainerItemLink(bag, slot);
 
-                        if bagLink and bagLink == item then
+                        if bagLink and GetItemInfo(bagLink) == GetItemInfo(item) then
                             LPTLootRoll_ToolTip:ClearLines();
                             LPTLootRoll_ToolTip:SetBagItem(bag, slot);
 
@@ -58,11 +58,11 @@ variables.events =
         functions.toggleWhisperListener();
         functions.controlRollListener();
     end,
-    ["CHAT_MSG_RAID_WARNING"] = 
+    ["CHAT_MSG_RAID_WARNING"] =
     function(...)
         local msg, author = ...;
-        local author = strsplit("-", author);
-        
+        author = strsplit("-", author);
+
         --Check if the person sending a raidwarning is the raid leader or if assist setting is enabled.
         if not functions.isLeaderOrAssistWithMode(author) then
             return;
@@ -80,7 +80,7 @@ variables.events =
             functions.resetTooltip();
 
             local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = GetItemInfo(msg);
-            
+
             --Stop if no item link is found.
             if link == nil then
                 functions.addToDebugHistory("Found no link.");
@@ -92,7 +92,7 @@ variables.events =
             local isPet = itemClassID == 15 and itemSubClassID == 2 or nil;
 
             LPTLootRoll_ToolTip:SetHyperlink(link);
-            local isToken = 
+            local isToken =
                 (
                     itemSubType == "Context Token" or 
                     (
@@ -102,7 +102,7 @@ variables.events =
                 );
 
             --If not relevant items then stop.
-            if not 
+            if not
             (
                 itemClassID == 4 or --Armor
                 itemClassID == 2 or --Weapon
@@ -116,7 +116,7 @@ variables.events =
 
             --Check for pet
             local usabilityVar = isPet;
-            
+
             --Check for red text in tooltip.
             if usabilityVar == nil then
                 functions.resetTooltip();
@@ -134,22 +134,22 @@ variables.events =
 
             --Check for special item slots.
             if usabilityVar == nil then
-                usabilityVar = 
-                    ( 
+                usabilityVar =
+                    (
                         --Check if it item is a cloak.
-                        itemEquipLoc == "INVTYPE_CLOAK" or 
+                        itemEquipLoc == "INVTYPE_CLOAK" or
                         --Check if it is a ring.
-                        itemEquipLoc == "INVTYPE_FINGER" or 
+                        itemEquipLoc == "INVTYPE_FINGER" or
                         --Check if it is a neck.
-                        itemEquipLoc == "INVTYPE_NECK" or 
+                        itemEquipLoc == "INVTYPE_NECK" or
                         --Check if item is an off-hand, and if player "should" use off-hands.
                         (itemEquipLoc == "INVTYPE_HOLDABLE" and variables.classArray[variables.playerClassId][itemEquipLoc])
-                    ) 
-                    and 
-                        true 
-                    or 
+                    )
+                    and
+                        true
+                    or
                         nil;
-                
+
                 if usabilityVar then
                     functions.addToDebugHistory("Item is for cloak/finger/neck or is holdable and player class can normally use off-hands.");
                 end
@@ -160,19 +160,19 @@ variables.events =
                 local itemValues = functions.getItemValues(link);
                 local usableStats = functions.usableStats(itemValues);
                 local anyStats = itemValues.agility or itemValues.strength or itemValues.intellect;
-                
-                usabilityVar = 
-                    ( 
+
+                usabilityVar =
+                    (
                         --Check if it is a trinket, if the trinket has any main stats then use that to detect if usable.
                         (itemEquipLoc == "INVTYPE_TRINKET" and ((anyStats and usableStats) or not anyStats)) or
                         --Check if item is an equippable weapon/armor piece with correct stats.
                         (variables.classArray[variables.playerClassId][itemClassID][itemSubClassID] and usableStats)
-                    ) 
-                    and 
-                        true 
-                    or 
+                    )
+                    and
+                        true
+                    or
                         nil;
-                
+
                 if usabilityVar then
                     functions.addToDebugHistory("Item is either trinket with no stats or correct stats, or of correct item type with correct stats.");
                 end
@@ -188,15 +188,15 @@ variables.events =
             end
 
             local ownerName = select(3, msg:find("(.+) (- .+)"));
-            local owner = 
+            local owner =
                 (
-                    UnitPlayerOrPetInRaid(ownerName) 
-                    and 
+                    UnitPlayerOrPetInRaid(ownerName)
+                    and
                         {
                             name = ownerName,
                             color = functions.getClassColor(ownerName)
                         }
-                    or 
+                    or
                         nil
                 );
 
@@ -212,7 +212,7 @@ variables.events =
                 --Insert the new item into the rollhistory array.
                 tinsert(
                     variables.rollHistory, 
-                    1, 
+                    1,
                     {
                         item 		     = link,
                         mainList 	     = {},
@@ -234,7 +234,7 @@ variables.events =
             end
         end)
     end,
-    ["CHAT_MSG_SYSTEM"] = 
+    ["CHAT_MSG_SYSTEM"] =
     function(...)
         if not variables.rollHistory[1] or variables.rollHistory[1].distributed then
 			return;
@@ -242,11 +242,11 @@ variables.events =
 
 		local msg = ...;
 		local author, roll, rollMin, rollMax = strmatch(msg, "(.+) rolls (%d+) %((%d+)-(%d+)%)");
-		
+
 		if not author then
 			return;
 		end
-		
+
 		--Convert the rolls to numbers.
 		roll 	= tonumber(roll);
 		rollMin = tonumber(rollMin);
@@ -273,9 +273,9 @@ variables.events =
 		else
 			roll = rollMax;
         end
-        
+
         functions.addToDebugHistory("Roll " .. rollType .. " detected from player " .. author .. ".");
-        
+
 		--Make sure the user has not already rolled.
 		if #determinedArray > 0 then
 			for _, v in pairs(determinedArray) do 
@@ -284,21 +284,21 @@ variables.events =
 				end
 			end
         end
-		
+
 		--Insert the roller into the array.
         tinsert(
-            determinedArray, 
+            determinedArray,
             {
-                author, 
-                roll, 
-                functions.getClassColor(author), 
+                author,
+                roll,
+                functions.getClassColor(author),
                 rollType
             }
         );
 
         variables.rollHistory[1].potentialRollers[author] = true;
         functions.updateRollerCounter();
-	
+
         --Sort table based primarly by roll number, secondly by name.
         table.sort(
             determinedArray, 
@@ -313,7 +313,7 @@ variables.events =
             end
         );
     end,
-    ["CHAT_MSG_WHISPER"] = 
+    ["CHAT_MSG_WHISPER"] =
     function(...)
         local msg, author = ...;
         local name, _ = strsplit("-", author);
@@ -325,7 +325,7 @@ variables.events =
                 functions.addToDebugHistory("Found no item in whisper message.");
                 return;
             end
-    
+
             item:ContinueOnItemLoad(function()
                 functions.registerItem(name, msg);
                 functions.addToDebugHistory("Item is loaded and registered in loot announcer.");
@@ -353,7 +353,7 @@ variables.events =
                         end
                     end
                 end
-            
+
                 variables.rollHistory[1].potentialRollers[name] = false;
             elseif value == variables.itemPassKey and variables.rollHistory[1].potentialRollers[name] == false then
                 variables.rollHistory[1].potentialRollers[name] = true;

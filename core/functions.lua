@@ -78,14 +78,14 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER", filterFunction);
 ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", filterFunction);
 
 --Get data from the custom hyperlinks.
-hooksecurefunc("SetItemRef", 
+hooksecurefunc("SetItemRef",
 	function(link, text)
 		local linkType, addon, param1 = strsplit(":", link);
 
 		if linkType ~= "garrmission" or addon ~= "lptlootroll" then
 			return;
 		end
-		
+
 		local key, value = strsplit("&", param1);
 
 		if not key or not value then
@@ -105,7 +105,7 @@ hooksecurefunc("SetItemRef",
 		elseif key == "roller" then
 			local name, rollType = strsplit("-", value)
 			local dialog = StaticPopup_Show("LPTLootRoll_DistributeItem", name, rollType);
-			
+
 			if dialog then
 				dialog.data = value;
 			end
@@ -131,7 +131,7 @@ hooksecurefunc("SetItemRef",
 function functions.printCommands()
 	print("");
 	functions.printOut(locale.commandAvailable);
-	
+
 	for i, v in pairs(variables.commandArray) do
 		print("|Hgarrmission:lptlootroll:command&" .. i .. "|h|cFF00CCFF[" .. i:gsub("^%l", strupper) .. "]|h|r|cFFFFFF00 - " .. v.description);
 	end
@@ -194,15 +194,6 @@ function functions.calculateScale()
 	local parentScale = UIParent:GetScale();
 
 	return 768/yResolution/(yResolution > 1200 and parentScale or 1);
-end
-
---Function for showing the config window.
-function functions.toggleConfig()
-	InterfaceOptionsFrame_OpenToCategory(LPTLootRoll_Config);
-
-	if not LPTLootRoll_Config:IsShown() then
-		InterfaceOptionsFrame_OpenToCategory(LPTLootRoll_Config);
-	end
 end
 
 --Function for hiding tooltip on mouseover.
