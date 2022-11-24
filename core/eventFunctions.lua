@@ -30,8 +30,8 @@ variables.events =
         C_Timer.After(2,
             function()
                 for bag = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
-                    for slot = 1, GetContainerNumSlots(bag) do
-                        local bagLink = GetContainerItemLink(bag, slot);
+                    for slot = 1, C_Container.GetContainerNumSlots(bag) do
+                        local bagLink = C_Container.GetContainerItemLink(bag, slot);
 
                         if bagLink and GetItemInfo(bagLink) == GetItemInfo(item) then
                             LPTLootRoll_ToolTip:ClearLines();
@@ -52,7 +52,7 @@ variables.events =
             end
         );
     end,
-    ["GROUP_ROSTER_UPDATE"] = 
+    ["GROUP_ROSTER_UPDATE"] =
     function(...)
         functions.toggleLootListener();
         functions.toggleWhisperListener();

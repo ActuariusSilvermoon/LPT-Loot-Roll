@@ -31,10 +31,10 @@ function(msg)
 		variables.commandArray[msg].func();
 		return;
 	end
-	
+
 	print("");
 	functions.printOut(GetAddOnMetadata("LPT Loot Roll", "Title") .. " version: " .. GetAddOnMetadata("LPT Loot Roll", "Version"));
-	
+
 	if msg and msg ~= "" then
 		functions.printOut(locale.commandNotRecognized);
 	else
@@ -144,25 +144,25 @@ end
 
 --Input the current item into the roll frame.
 function functions.setItemButtonData(frame, link)
-	frame:SetScript("OnMouseDown", 
-		function(self,button) 
-			if IsModifiedClick("CHATLINK") then 
+	frame:SetScript("OnMouseDown",
+		function(self,button)
+			if IsModifiedClick("CHATLINK") then
 				ChatEdit_InsertLink(link);
-			elseif IsModifiedClick("DRESSUP") then 
+			elseif IsModifiedClick("DRESSUP") then
 				DressUpItemLink(link);
-			elseif IsShiftKeyDown() and button=="RightButton" then 
-				OpenAzeriteEmpoweredItemUIFromLink(link) 
-			end 
+			elseif IsShiftKeyDown() and button=="RightButton" then
+				OpenAzeriteEmpoweredItemUIFromLink(link);
+			end
 		end
 	);
-	
+
 	frame:SetNormalTexture(select(10,GetItemInfo(link)));
-	
-	frame:SetScript("OnEnter", 
+
+	frame:SetScript("OnEnter",
 		function(self) 
-			GameTooltip:SetOwner(self, "ANCHOR_CURSOR"); 
-			GameTooltip:ClearLines(); 
-			GameTooltip:SetHyperlink(link); 
+			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
+			GameTooltip:ClearLines();
+			GameTooltip:SetHyperlink(link);
 			GameTooltip:Show();
 		end
 	);
@@ -205,21 +205,21 @@ end
 --Function for getting the class color of a given player.
 function functions.getClassColor(player)
 	local _, playerClass = UnitClass(player);
-	
+
 	return RAID_CLASS_COLORS[playerClass].colorStr;
 end
 
 --Function for checking if it is mog that the player does not know and can collect.
 function functions.usableMog(link)
 	local appearId, source = C_TransmogCollection.GetItemInfo(link);
-	
+
 	if not appearId or not source then
 		return false;
 	end
 
 	local collectable = select(2, C_TransmogCollection.PlayerCanCollectSource(source));
 	local sources = C_TransmogCollection.GetAppearanceSources(appearId);
-	
+
 	if sources and collectable then
 		for i, v in pairs(sources) do
 			if v.isCollected then 
@@ -227,7 +227,7 @@ function functions.usableMog(link)
 			end
 		end
 	end
-	
+
 	return collectable;
 end
 
@@ -276,7 +276,7 @@ function functions.tooltipHasString(searchString)
 	for i = 1, LPTLootRoll_ToolTip:NumLines() or 0 do 
 		local left = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextLeft" .. i);
 		local leftText = left:GetText() or "";
-		
+
 		if strlower(leftText):match(strlower(searchString)) then
 			return true;
 		end
@@ -338,7 +338,7 @@ function functions.addToDebugHistory(input)
 	while #variables.debugHistory >= 50 do
 		tremove(variables.debugHistory, 1);
 	end
-	
+
 	tinsert(
 		variables.debugHistory,
 		{

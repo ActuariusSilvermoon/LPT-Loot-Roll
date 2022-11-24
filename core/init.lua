@@ -31,12 +31,12 @@ loadFrame:SetScript("OnEvent",
 			if not llrSettings then 
 				llrSettings = {};
 			end
-			
+
 			--History database control.
 			if not rollHistoryDB then 
 				rollHistoryDB = {};
 			end
-			
+
 			if not rollHistoryDB.rollHistory then
 				rollHistoryDB.rollHistory = {};
 			end
@@ -45,19 +45,19 @@ loadFrame:SetScript("OnEvent",
 			if not llrSettings.leadMode then
 				llrSettings.leadMode = false;
 			end
-			
+
 			if not llrSettings.scrollMode then
 				llrSettings.scrollMode = false;
 			end
-			
+
 			if not llrSettings.saveMode then
 				llrSettings.saveMode = false;
 			end
-			
+
 			if not llrSettings.eventMode then
 				llrSettings.eventMode = false;
 			end
-			
+
 			if not llrSettings.assistMode then
 				llrSettings.assistMode = false;
 			end
@@ -65,7 +65,7 @@ loadFrame:SetScript("OnEvent",
 			if not llrSettings.lootListener then 
 				llrSettings.lootListener = false;
 			end
-			
+
 			if not llrSettings.whisperListener then
 				llrSettings.whisperListener = false;
 			end
@@ -77,16 +77,16 @@ loadFrame:SetScript("OnEvent",
 			if not llrSettings.whisperNotificationMode then
 				llrSettings.whisperNotificationMode = false;
 			end
-			
+
 			--Integers.
 			if not llrSettings.leaderScale then
 				llrSettings.leaderScale = 1;
 			end
-			
+
 			if not llrSettings.userScale then
 				llrSettings.userScale = 1;
 			end
-			
+
 			if not llrSettings.itemListScale then
 				llrSettings.itemListScale = 1;
 			end
@@ -94,15 +94,15 @@ loadFrame:SetScript("OnEvent",
 			if not llrSettings.mainRoll then
 				llrSettings.mainRoll = 100;
 			end
-			
+
 			if not llrSettings.offRoll then
 				llrSettings.offRoll = 50;
 			end
-			
+
 			if not llrSettings.mogRoll then
 				llrSettings.mogRoll = 25;
 			end
-			
+
 			if not llrSettings.historyLength then
 				llrSettings.historyLength = 20;
 			end
@@ -111,17 +111,17 @@ loadFrame:SetScript("OnEvent",
 			if not llrSettings.masterLooter then
 				llrSettings.masterLooter = "";
 			end
-			
+
 			--Save mode binding.
 			if llrSettings.saveMode then
 				variables.rollHistory = rollHistoryDB.rollHistory;
-				
+
 				--Pre cache history items.
 				for i, v in ipairs(variables.rollHistory) do
 					GetItemInfo(v.item);
 				end
 			end
-			
+
 			--Create startup variables.
 			variables.screenScale = functions.calculateScale();
 			variables.addonLoaded = true;

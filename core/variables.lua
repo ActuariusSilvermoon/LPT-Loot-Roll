@@ -23,67 +23,67 @@ variables.itemPassKey 	= "itemPassed";
 
 variables.closeWindowKey = "closeWindow";
 
-variables.commandArray = 
+variables.commandArray =
 {
-	[locale.commandArrayLeaderTitle] = 
+	[locale.commandArrayLeaderTitle] =
 	{
-		func = 
-			function() 
-				functions.displayLeaderWindow()
+		func =
+			function()
+				functions.displayLeaderWindow();
 			end,
 		description = locale.commandArrayLeaderDescription
 	},
-	[locale.commandArrayUserTitle] = 
+	[locale.commandArrayUserTitle] =
 	{
 		func = 
-			function() 
-				functions.displayUser()
+			function()
+				functions.displayUser();
 			end,
 		description = locale.commandArrayUserDescription
 	},
-	[locale.commandArrayItemTitle] = 
+	[locale.commandArrayItemTitle] =
 	{
 		func = 
-			function() 
-				functions.displayItemList()
+			function()
+				functions.displayItemList();
 			end,
 		description = locale.commandArrayItemDescription
 	},
-	[locale.commandArrayClearTitle] = 
+	[locale.commandArrayClearTitle] =
 	{
-		func = 
-			function() 
-				StaticPopup_Show("LPTLootRoll_ClearHistory")
+		func =
+			function()
+				StaticPopup_Show("LPTLootRoll_ClearHistory");
 			end,
 		description = locale.commandArrayClearDescription
 	},
-	[locale.commandArrayResetTitle] = 
+	[locale.commandArrayResetTitle] =
 	{
-		func = 
-			function() 
-				StaticPopup_Show("LPTLootRoll_ResetPosition")
+		func =
+			function()
+				StaticPopup_Show("LPTLootRoll_ResetPosition");
 			end,
 		description = locale.commandArrayResetDescription
 	},
-	[locale.commandArrayConfigTitle] = 
+	[locale.commandArrayConfigTitle] =
 	{
-		func = 
-			function() 
-				functions.toggleConfig()
+		func =
+			function()
+				functions.toggleConfig();
 			end,
 		description = locale.commandArrayConfigDescription
 	},
-	[locale.commandArrayHelpTitle] = 
+	[locale.commandArrayHelpTitle] =
 	{
-		func = 
-			function() 
+		func =
+			function()
 				functions.printCommands();
 			end,
 		description = locale.commandArrayHelpDescription
 	},
 	[locale.commandArrayDebugTitle] =
 	{
-		func = 
+		func =
 			function()
 				functions.printDebugHistory();
 			end,

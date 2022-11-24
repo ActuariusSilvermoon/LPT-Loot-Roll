@@ -40,7 +40,7 @@ end
 
 --Function for saving data from config window and closing it.
 local function saveData()
-	if not variables.addonLoaded then 
+	if not variables.addonLoaded then
 		return;
 	end
 
@@ -173,17 +173,17 @@ LPTLootRoll_ConfigWindow.mogSettingFrame 	 = CreateFrame("Frame", nil, LPTLootRo
 LPTLootRoll_ConfigWindow.historySettingFrame = CreateFrame("Frame", nil, LPTLootRoll_ConfigWindow);
 
 --Create the editBox frames.
-LPTLootRoll_ConfigWindow.masterLooterFrame.editBox 	 = CreateFrame("EditBox", nil, LPTLootRoll_ConfigWindow.historySettingFrame, "InputBoxTemplate");
+LPTLootRoll_ConfigWindow.masterLooterFrame.editBox 	 = CreateFrame("EditBox", nil, LPTLootRoll_ConfigWindow.masterLooterFrame, "InputBoxTemplate");
 LPTLootRoll_ConfigWindow.mainSettingFrame.editBox 	 = CreateFrame("EditBox", nil, LPTLootRoll_ConfigWindow.mainSettingFrame, "InputBoxTemplate");
 LPTLootRoll_ConfigWindow.offSettingFrame.editBox 	 = CreateFrame("EditBox", nil, LPTLootRoll_ConfigWindow.offSettingFrame, "InputBoxTemplate");
 LPTLootRoll_ConfigWindow.mogSettingFrame.editBox 	 = CreateFrame("EditBox", nil, LPTLootRoll_ConfigWindow.mogSettingFrame, "InputBoxTemplate");
 LPTLootRoll_ConfigWindow.historySettingFrame.editBox = CreateFrame("EditBox", nil, LPTLootRoll_ConfigWindow.historySettingFrame, "InputBoxTemplate");
 
 --Initialize the loot master name editbox.
-functions.editBoxFactory(LPTLootRoll_ConfigWindow.masterLooterFrame, LPTLootRoll_ConfigWindow.masterLooterFrame.editBox, LPTLootRoll_ConfigWindow, 12, 110, locale.masterLooterEditBox, nil, false, 24, 100);
+functions.editBoxFactory(LPTLootRoll_ConfigWindow.masterLooterFrame, LPTLootRoll_ConfigWindow.masterLooterFrame.editBox, LPTLootRoll_ConfigWindow, 12, 115, locale.masterLooterEditBox, nil, false, 24, 100);
 
 --Initialize the roll setting frames.
-functions.editBoxFactory(LPTLootRoll_ConfigWindow.mainSettingFrame, LPTLootRoll_ConfigWindow.mainSettingFrame.editBox, LPTLootRoll_ConfigWindow, 12, 70, locale.mainValueEditbox, LPTLootRoll_ConfigWindow.offSettingFrame, true);
+functions.editBoxFactory(LPTLootRoll_ConfigWindow.mainSettingFrame, LPTLootRoll_ConfigWindow.mainSettingFrame.editBox, LPTLootRoll_ConfigWindow, 12, 70, locale.mainValueEditBox, LPTLootRoll_ConfigWindow.offSettingFrame, true);
 functions.editBoxFactory(LPTLootRoll_ConfigWindow.offSettingFrame, LPTLootRoll_ConfigWindow.offSettingFrame.editBox, LPTLootRoll_ConfigWindow, 12, 30, locale.offValueEditBox, LPTLootRoll_ConfigWindow.mogSettingFrame, true);
 functions.editBoxFactory(LPTLootRoll_ConfigWindow.mogSettingFrame, LPTLootRoll_ConfigWindow.mogSettingFrame.editBox, LPTLootRoll_ConfigWindow, 12, -10, locale.mogValueEditBox, LPTLootRoll_ConfigWindow.historySettingFrame, true);
 
