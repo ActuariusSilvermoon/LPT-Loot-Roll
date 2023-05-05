@@ -2,7 +2,6 @@
 -------VARIABLES-------
 -----------------------
 
-
 local ADDON_NAME, namespace = ...;
 local variables = {};
 local functions = {};
@@ -16,10 +15,10 @@ variables.clientLanguage = GetLocale();
 
 local loadFrame = CreateFrame("FRAME");
 
+
 -----------------------
 -----EVENT HANDLING----
 -----------------------
-
 
 --Initial check to see if addon variables exist, if they don't, create them.
 loadFrame:RegisterEvent("ADDON_LOADED");

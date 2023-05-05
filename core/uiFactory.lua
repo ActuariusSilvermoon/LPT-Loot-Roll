@@ -121,7 +121,7 @@ end
 function functions.editBoxFactory(frame, frameEditbox, parent, x, y, title, linkedFrame, numeric, maxLetter, width, height)
 	frame:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", x, y);
 	frame:SetSize(100, 200);
-	
+
 	--Create and set title of the setting.
 	frame.title = frame:CreateFontString(nil,"OVERLAY");
 	frame.title:SetFontObject("GameFontHighLight");
