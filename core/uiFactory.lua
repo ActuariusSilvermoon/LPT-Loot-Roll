@@ -32,12 +32,12 @@ function functions.scrollFrameFactory(frame, config, xValue, yValue, title, widt
 	frame:SetPoint("LEFT", config, "LEFT", xValue, yValue);
 	frame:EnableMouse(true);
 	frame:EnableMouseWheel(true);
-	
+
 	frame.title = frame:CreateFontString(nil,"OVERLAY");
 	frame.title:SetFontObject("GameFontHighLight");
 	frame.title:SetPoint("TOP", frame, "TOP", 0, 1);
 	frame.title:SetText(title);
-	
+
 	--ScrollingMessageFrame
 	local messageFrame = CreateFrame("ScrollingMessageFrame", nil, frame);
 	messageFrame:SetPoint("TOPLEFT", 0, -17);
@@ -49,32 +49,32 @@ function functions.scrollFrameFactory(frame, config, xValue, yValue, title, widt
 	messageFrame:SetFading(false);
 	messageFrame:SetMaxLines(300);
 	frame.messageFrame = messageFrame;
-	
+
 	local tex = messageFrame:CreateTexture(nil,"BACKGROUND");
 	tex:SetAllPoints();
 	tex:SetColorTexture(0, 0, 0);
-	
+
 	local backDrop = CreateFrame("Frame", nil, messageFrame, BackdropTemplateMixin and "BackdropTemplate");
 	backDrop:SetPoint("TOPLEFT", -5, 6);
 	backDrop:SetPoint("BOTTOMRIGHT", 2, -6);
 
-	backDrop:SetBackdrop( 
-		{ 
-			bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
-			edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-			tile = true, 
-			tileSize = 16, 
-			edgeSize = 16, 
-			insets = 
-			{ 
-				left = 4, 
-				right = 4, 
-				top = 4, 
-				bottom = 4 
+	backDrop:SetBackdrop(
+		{
+			bgFile = "Interface/Tooltips/UI-Tooltip-Background",
+			edgeFile = "Interface/Tooltips/UI-Tooltip-Border",
+			tile = true,
+			tileSize = 16,
+			edgeSize = 16,
+			insets =
+			{
+				left = 4,
+				right = 4,
+				top = 4,
+				bottom = 4
 			}
 		});
 	backDrop:SetBackdropColor(0,0,0,0);
-	
+
 	--Scroll bar
 	local scrollBar = CreateFrame("Slider", nil, frame, "UIPanelScrollBarTemplate");
 	scrollBar:SetPoint("RIGHT", frame, "RIGHT", 4, 11);
@@ -90,7 +90,7 @@ function functions.scrollFrameFactory(frame, config, xValue, yValue, title, widt
 			messageFrame:SetScrollOffset(select(2, scrollBar:GetMinMaxValues()) - value);
 		end
 	);
-	
+
 	scrollBar:SetValue(0);
 
 	frame:SetScript("OnMouseWheel", 

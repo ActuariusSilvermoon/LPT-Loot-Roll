@@ -33,7 +33,7 @@ end
 local function updateWindow()
     local frame = LPTLootRoll_ItemListWindow.itemFrame.messageFrame;
     local arrLength = #variables.itemsToRoll;
-    
+
     frame:Clear();
     LPTLootRoll_ItemListWindow.skipItemButton:SetEnabled(arrLength > 0);
     LPTLootRoll_ItemListWindow.nextItemButton:SetEnabled(arrLength > 0);
@@ -42,16 +42,16 @@ local function updateWindow()
         return;
     end
 
-    if arrLength > 15 then 
+    if arrLength > 15 then
 		frame:GetParent().scrollBar:SetMinMaxValues(0, arrLength-15);
 	end
 
     frame:SetMaxLines(arrLength);
-    
+
 	--Determine how the frames should be scrolled before displaying them.
     local scrollBarScroll = 0;
 	local frameScroll = arrLength-15;
-    
+
     addArrayToFrame();
 	frame:GetParent().scrollBar:SetValue(scrollBarScroll);
 	frame:SetScrollOffset(frameScroll);
@@ -63,7 +63,7 @@ end
 -----------------------
 
 
-LPTLootRoll_ItemListWindow:SetScript("OnEvent", 
+LPTLootRoll_ItemListWindow:SetScript("OnEvent",
     function(self, event, ...)
         variables.events[event](...);
     end
@@ -132,7 +132,7 @@ LPTLootRoll_ItemListWindow.itemFrame.messageFrame:SetHyperlinksEnabled(1);
 
 
 --Enable standard mouseover tooltip functionality.
-LPTLootRoll_ItemListWindow.itemFrame.messageFrame:SetScript("OnHyperlinkEnter", 
+LPTLootRoll_ItemListWindow.itemFrame.messageFrame:SetScript("OnHyperlinkEnter",
     function(_, text, _)
         local index = select(3, text:find("(%d)"));
         index = tonumber(index);
@@ -164,11 +164,11 @@ function functions.registerItem(sender, item)
     end
 
     local _, itemLink = GetItemInfo(item);
-    
+
     if not itemLink then
         return;
     end
-    
+
     tinsert(
         variables.itemsToRoll, 
         {
@@ -177,7 +177,7 @@ function functions.registerItem(sender, item)
             functions.getClassColor(sender)
         }
     );
-    
+
     table.sort(
         variables.itemsToRoll, 
         function(a, b)
@@ -199,12 +199,12 @@ end
 --Function for the item list buttons.
 function functions.popList(index, postBool)
     local head = tremove(variables.itemsToRoll, index or 1);
-    
+
     updateWindow();
 
     if postBool then
         C_ChatInfo.SendAddonMessage("LPTLootRoll", variables.closeWindowKey, "RAID");
-        
+
         SendChatMessage(head[1] .. " - " .. head[2], "RAID_WARNING", nil, nil);
     end
 
@@ -228,14 +228,14 @@ end
 function functions.displayItemList()
 	if not LPTLootRoll_ItemListWindow:IsShown() then
 		LPTLootRoll_ItemListWindow:Show();
-	end 
+	end
 end
 
 --Function for hiding the user window.
 function functions.hideItemList()
 	if LPTLootRoll_ItemListWindow:IsShown() then
 		LPTLootRoll_ItemListWindow:Hide();
-	end 
+	end
 end
 
 --Function for resetting the user window position.
@@ -248,7 +248,7 @@ end
 function functions.toggleWhisperListener()
     if llrSettings.whisperListener and UnitInRaid("player") then
         LPTLootRoll_ItemListWindow:RegisterEvent("CHAT_MSG_WHISPER");
-    else 
+    else
         LPTLootRoll_ItemListWindow:UnregisterEvent("CHAT_MSG_WHISPER");
     end
 end

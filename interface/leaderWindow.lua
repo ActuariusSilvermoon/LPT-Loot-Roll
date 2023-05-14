@@ -21,7 +21,7 @@ local historyIndex = 1;
 local function clearFrame(frame)
 	--Clear list views to prepare for new item.
 	frame:Clear();
-	
+
 	--Reset scrollbar values. 
 	frame:GetParent().scrollBar:SetMinMaxValues(0,0);
 	frame:GetParent().scrollBar:SetValue(select(1, frame:GetParent().scrollBar:GetMinMaxValues()));
@@ -51,7 +51,7 @@ end
 local function updateMessageframe(frame, array)
 	clearFrame(frame);
 
-	if not array then 
+	if not array then
 		return;
 	end
 
@@ -142,7 +142,7 @@ local function hyperLinkClick(self, link, text, button)
 	if historyIndex ~= 1 or variables.rollHistory[1].distributed or not (functions.isLeaderOrAssistWithMode("player")) then
 		return;
 	end
-	
+
 	ChatFrame_OnHyperlinkShow(self, link, text, button);
 end
 
@@ -345,7 +345,7 @@ function functions.resetItemAndRollHistory()
 	clearFrame(LPTLootRoll_LeaderWindow.offFrame.messageFrame);
 	clearFrame(LPTLootRoll_LeaderWindow.mogFrame.messageFrame);
 	clearFrame(LPTLootRoll_LeaderWindow.otherFrame.messageFrame);
-	
+
 	table.wipe(variables.rollHistory);
 
 	LPTLootRoll_LeaderWindow.historyButtonFrame.pageNumber:SetText("");
@@ -357,7 +357,7 @@ end
 --Function for starting the leader window upon a new item drop.
 function functions.leaderEvent(isUsable)
 	functions.displayLeaderWindow();
-	
+
 	--If leader can equip, enable buttons, otherwise disable.
 	toggleButtons(isUsable);
 end
@@ -375,7 +375,7 @@ function functions.displayLeaderWindow()
 	--Toggle LPTLootRoll_LeaderWindow UI.
 	if not LPTLootRoll_LeaderWindow:IsShown() then
 		LPTLootRoll_LeaderWindow:Show();
-	end 
+	end
 
 	scrollHistory();
 end
@@ -439,6 +439,6 @@ function functions.updateRollerCounter()
 	end
 
 	local statusColor = (finished == potential and "|cff00ff00" or (finished > 0 and "|cffffff00" or "|cffff0000"));
- 	
+
 	LPTLootRoll_LeaderWindow.potentialRollers.text:SetText(locale.rollers .. ": " .. statusColor .. finished .. " / " .. potential);
 end

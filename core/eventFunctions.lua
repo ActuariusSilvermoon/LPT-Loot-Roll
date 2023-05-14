@@ -94,10 +94,13 @@ variables.events =
             LPTLootRoll_ToolTip:SetHyperlink(link);
             local isToken =
                 (
-                    itemSubType == "Context Token" or 
+                    itemSubType == "Context Token" or
                     (
                         itemSubType == "Junk" and
-                        functions.tooltipHasString("Use: Create a soulbound ")
+                        (
+                            functions.tooltipHasString("Use: Create a soulbound ") or
+                            functions.tooltipHasString("Use: Synthesize a soulbound")
+                        )
                     )
                 );
 

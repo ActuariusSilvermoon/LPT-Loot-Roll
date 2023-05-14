@@ -1,75 +1,77 @@
-if not IsAddOnLoaded("AddonSkins") then 
+if not IsAddOnLoaded("AddonSkins") then
 	return;
 end
 
-local AS = unpack(AddOnSkins)
+local AS, L, S, R = unpack(AddOnSkins)
 
-if not AS:CheckAddOn('LPT Loot Roll') then
-	return;
-end
-
-function AS:LPT_Loot_Roll()
+function AS:LPT_Loot_Roll(event, addon)
 	--User window
-	AS:SkinFrame(LPTLootRoll_User);
-	AS:SkinButton(LPTLootRoll_User.mainSpeccButton);
-	AS:SkinButton(LPTLootRoll_User.offSpeccButton);
-	AS:SkinButton(LPTLootRoll_User.mogButton);
-	AS:SkinButton(LPTLootRoll_User.otherButton);
+	S:HandleFrame(LPTLootRoll_User);
+	S:HandleButton(LPTLootRoll_User.mainSpeccButton);
+	S:HandleButton(LPTLootRoll_User.offSpeccButton);
+	S:HandleButton(LPTLootRoll_User.mogButton);
+	S:HandleButton(LPTLootRoll_User.otherButton);
 
 
 	--Leader window.
-	AS:SkinFrame(LPTLootRoll_Leader);
-	AS:SkinButton(LPTLootRoll_Leader.rollFrame.mainSpeccButton);
-	AS:SkinButton(LPTLootRoll_Leader.rollFrame.offSpeccButton);
-	AS:SkinButton(LPTLootRoll_Leader.rollFrame.mogButton);
-	AS:SkinButton(LPTLootRoll_Leader.rollFrame.otherButton);
-	AS:SkinButton(LPTLootRoll_Leader.rollFrame.passButton);
+	S:HandleFrame(LPTLootRoll_Leader);
+	S:HandleButton(LPTLootRoll_Leader.rollFrame.mainSpeccButton);
+	S:HandleButton(LPTLootRoll_Leader.rollFrame.offSpeccButton);
+	S:HandleButton(LPTLootRoll_Leader.rollFrame.mogButton);
+	S:HandleButton(LPTLootRoll_Leader.rollFrame.otherButton);
+	S:HandleButton(LPTLootRoll_Leader.rollFrame.passButton);
 
-	AS:SkinButton(LPTLootRoll_Leader.historyButtonFrame.nextHistoryPage);
-	AS:SkinButton(LPTLootRoll_Leader.historyButtonFrame.previousHistoryPage);
+	S:HandleButton(LPTLootRoll_Leader.historyButtonFrame.nextHistoryPage);
+	S:HandleButton(LPTLootRoll_Leader.historyButtonFrame.previousHistoryPage);
 
-	AS:SkinFrame(LPTLootRoll_Leader.mainFrame.messageFrame);
-	AS:SkinFrame(LPTLootRoll_Leader.offFrame.messageFrame);
-	AS:SkinFrame(LPTLootRoll_Leader.mogFrame.messageFrame);
-	AS:SkinFrame(LPTLootRoll_Leader.otherFrame.messageFrame);
+	S:HandleFrame(LPTLootRoll_Leader.mainFrame.messageFrame);
+	S:HandleFrame(LPTLootRoll_Leader.offFrame.messageFrame);
+	S:HandleFrame(LPTLootRoll_Leader.mogFrame.messageFrame);
+	S:HandleFrame(LPTLootRoll_Leader.otherFrame.messageFrame);
 
-	AS:SkinScrollBar(LPTLootRoll_Leader.mainFrame.scrollBar);
-	AS:SkinScrollBar(LPTLootRoll_Leader.offFrame.scrollBar);
-	AS:SkinScrollBar(LPTLootRoll_Leader.mogFrame.scrollBar);
-	AS:SkinScrollBar(LPTLootRoll_Leader.otherFrame.scrollBar);
+	S:HandleScrollBar(LPTLootRoll_Leader.mainFrame.scrollBar);
+	S:HandleScrollBar(LPTLootRoll_Leader.offFrame.scrollBar);
+	S:HandleScrollBar(LPTLootRoll_Leader.mogFrame.scrollBar);
+	S:HandleScrollBar(LPTLootRoll_Leader.otherFrame.scrollBar);
 
 
 	--Item list window.
-	AS:SkinFrame(LPTLootRoll_ItemList);
+	S:HandleFrame(LPTLootRoll_ItemList);
 
-	AS:SkinButton(LPTLootRoll_ItemList.nextItemButton);
-	AS:SkinButton(LPTLootRoll_ItemList.skipItemButton);
+	S:HandleButton(LPTLootRoll_ItemList.nextItemButton);
+	S:HandleButton(LPTLootRoll_ItemList.skipItemButton);
 
-	AS:SkinFrame(LPTLootRoll_ItemList.itemFrame.messageFrame);
+	S:HandleFrame(LPTLootRoll_ItemList.itemFrame.messageFrame);
 
-	AS:SkinScrollBar(LPTLootRoll_ItemList.itemFrame.scrollBar);
+	S:HandleScrollBar(LPTLootRoll_ItemList.itemFrame.scrollBar);
 
 
 	--Config window
-	AS:SkinButton(LPTLootRoll_Config.shareButton);
-	AS:SkinButton(LPTLootRoll_Config.clearData);
-	AS:SkinButton(LPTLootRoll_Config.resetPosition);
+	S:HandleButton(LPTLootRoll_Config.shareButton);
+	S:HandleButton(LPTLootRoll_Config.clearData);
+	S:HandleButton(LPTLootRoll_Config.resetPosition);
 
-	AS:SkinCheckBox(LPTLootRoll_LeadMode);
-	AS:SkinCheckBox(LPTLootRoll_ScrollMode);
-	AS:SkinCheckBox(LPTLootRoll_SaveMode);
-	AS:SkinCheckBox(LPTLootRoll_EventMode);
-	AS:SkinCheckBox(LPTLootRoll_AssistMode);
-	AS:SkinCheckBox(LPTLootRoll_LootListener);
-	AS:SkinCheckBox(LPTLootRoll_WhisperListener);
-	AS:SkinCheckBox(LPTLootRoll_MasterLooterMode);
-	AS:SkinCheckBox(LPTLootRoll_WhisperNotificationMode);
+	S:HandleCheckBox(LPTLootRoll_LeadMode);
+	S:HandleCheckBox(LPTLootRoll_ScrollMode);
+	S:HandleCheckBox(LPTLootRoll_SaveMode);
+	S:HandleCheckBox(LPTLootRoll_EventMode);
+	S:HandleCheckBox(LPTLootRoll_AssistMode);
+	S:HandleCheckBox(LPTLootRoll_LootListener);
+	S:HandleCheckBox(LPTLootRoll_WhisperListener);
+	S:HandleCheckBox(LPTLootRoll_MasterLooterMode);
+	S:HandleCheckBox(LPTLootRoll_WhisperNotificationMode);
 
-	AS:SkinEditBox(LPTLootRoll_Config.masterLooterFrame.editBox, 100, 12);
-	AS:SkinEditBox(LPTLootRoll_Config.mainSettingFrame.editBox, 40, 12);
-	AS:SkinEditBox(LPTLootRoll_Config.offSettingFrame.editBox, 40, 12);
-	AS:SkinEditBox(LPTLootRoll_Config.mogSettingFrame.editBox, 40, 12);
-	AS:SkinEditBox(LPTLootRoll_Config.historySettingFrame.editBox, 40, 12);
+	S:HandleEditBox(LPTLootRoll_Config.masterLooterFrame.editBox);
+	S:HandleEditBox(LPTLootRoll_Config.mainSettingFrame.editBox);
+	S:HandleEditBox(LPTLootRoll_Config.offSettingFrame.editBox);
+	S:HandleEditBox(LPTLootRoll_Config.mogSettingFrame.editBox);
+	S:HandleEditBox(LPTLootRoll_Config.historySettingFrame.editBox);
+
+	LPTLootRoll_Config.masterLooterFrame.editBox:SetSize(100, 20);
+	LPTLootRoll_Config.mainSettingFrame.editBox:SetSize(40, 20);
+	LPTLootRoll_Config.offSettingFrame.editBox:SetSize(40, 20);
+	LPTLootRoll_Config.mogSettingFrame.editBox:SetSize(40, 20);
+	LPTLootRoll_Config.historySettingFrame.editBox:SetSize(40, 20);
 end
 
 AS:RegisterSkin('LPT Loot Roll', AS.LPT_Loot_Roll);
