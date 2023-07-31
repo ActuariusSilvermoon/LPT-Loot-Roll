@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...
+local _, namespace = ...
 local functions = namespace.functions;
 local variables = namespace.variables;
 local locale = namespace.locale;
@@ -28,12 +28,12 @@ local function clearFrame(frame)
 end
 
 --Function for toggeling of all buttons in a frame.
-local function toggleButtons(enabled)
-	LPTLootRoll_LeaderWindow.rollFrame.mainSpeccButton:SetEnabled(enabled);
-	LPTLootRoll_LeaderWindow.rollFrame.offSpeccButton:SetEnabled(enabled);
-	LPTLootRoll_LeaderWindow.rollFrame.mogButton:SetEnabled(enabled);
-	LPTLootRoll_LeaderWindow.rollFrame.otherButton:SetEnabled(enabled);
-	LPTLootRoll_LeaderWindow.rollFrame.passButton:SetEnabled(enabled);
+local function toggleButtons(state)
+	LPTLootRoll_LeaderWindow.rollFrame.mainSpeccButton:SetEnabled(state);
+	LPTLootRoll_LeaderWindow.rollFrame.offSpeccButton:SetEnabled(state);
+	LPTLootRoll_LeaderWindow.rollFrame.mogButton:SetEnabled(state);
+	LPTLootRoll_LeaderWindow.rollFrame.otherButton:SetEnabled(state);
+	LPTLootRoll_LeaderWindow.rollFrame.passButton:SetEnabled(state);
 end
 
 --Reverse array function 
@@ -61,8 +61,8 @@ local function updateMessageframe(frame, array)
 		return;
 	end
 
-	if arrLength > 7 then 
-		frame:GetParent().scrollBar:SetMinMaxValues(0, arrLength-7);
+	if arrLength > 7 then
+		frame:GetParent().scrollBar:SetMinMaxValues(0, arrLength - 7);
 	end
 
 	frame:SetMaxLines(arrLength);
@@ -77,7 +77,7 @@ local function updateMessageframe(frame, array)
 		frameScroll = 0;
 	end
 
-	for i,v in ipairs(array) do 
+	for _, v in ipairs(array) do 
 		frame:AddMessage("|Hgarrmission:lptlootroll:roller&" .. v[1] .. "-" .. v[4] .. "|h|c" .. v[3] .. "(" .. v[2] .. ") " .. v[1] .. "|h|r");
 	end
 
@@ -100,7 +100,7 @@ local function titleBarControl()
 	LPTLootRoll_LeaderWindow.historyButtonFrame.previousHistoryPage:SetEnabled(historyIndex > 1);
 
 	local owner = variables.rollHistory[historyIndex].owner;
-	
+
 	LPTLootRoll_LeaderWindow.title:SetText(locale.userLeaderTitleText(owner));
 end
 
@@ -123,9 +123,8 @@ local function playerMouseover(_, _, input)
 		return;
 	end
 
-
-	GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR"); 
-	GameTooltip:ClearLines(); 
+	GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR");
+	GameTooltip:ClearLines();
 
 	if variables.rollHistory[1].distributed then
 		GameTooltip:AddLine("|cFFFFFF00" .. locale.itemDistributed);
@@ -152,8 +151,8 @@ end
 -----------------------
 
 
-LPTLootRoll_LeaderWindow:SetScript("OnEvent", 
-	function(self, event, ...)
+LPTLootRoll_LeaderWindow:SetScript("OnEvent",
+	function(_, event, ...)
 		variables.events[event](...);
 
 		--If on main page, then update the message frames.
@@ -182,21 +181,21 @@ LPTLootRoll_LeaderWindow:Hide();
 
 LPTLootRoll_LeaderWindow:SetScript("OnDragStart", LPTLootRoll_LeaderWindow.StartMoving);
 LPTLootRoll_LeaderWindow:SetScript("OnDragStop", LPTLootRoll_LeaderWindow.StopMovingOrSizing);
-LPTLootRoll_LeaderWindow:SetScript("OnShow", 
-	function(self) 
+LPTLootRoll_LeaderWindow:SetScript("OnShow",
+	function(_)
 		functions.updateLeaderScale();
 		functions.controlRollListener();
 	end
 );
 
-LPTLootRoll_LeaderWindow:SetScript("OnHide", 
-	function(self) 
+LPTLootRoll_LeaderWindow:SetScript("OnHide",
+	function(_)
 		functions.controlRollListener();
 	end
 );
 
-LPTLootRoll_LeaderWindow:SetScript("OnMouseWheel", 
-	function(self, delta)
+LPTLootRoll_LeaderWindow:SetScript("OnMouseWheel",
+	function(_, delta)
 		scrollHistory(delta < 0);
 	end
 );
@@ -224,7 +223,7 @@ LPTLootRoll_LeaderWindow.potentialRollers:SetScript('OnEnter',
 		end
 
 		GameTooltip:SetOwner(UIParent, "ANCHOR_CURSOR"); 
-		GameTooltip:ClearLines(); 
+		GameTooltip:ClearLines();
 
 		GameTooltip:AddLine(locale.possibleRollers);
 		GameTooltip:AddLine("(|cff00ff00" .. locale.reacted .. "|r/|cffff0000" .. locale.notReacted .. "|r)");
@@ -249,35 +248,35 @@ LPTLootRoll_LeaderWindow.rollFrame:SetSize(60,120);
 LPTLootRoll_LeaderWindow.rollFrame:SetPoint("BOTTOMLEFT", LPTLootRoll_LeaderWindow, 8, 0);
 
 --Start instance of raid leader buttons.
-LPTLootRoll_LeaderWindow.rollFrame.mainSpeccButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, 0, locale.main, 60, 20, 
-	function(self) 
+LPTLootRoll_LeaderWindow.rollFrame.mainSpeccButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, 0, locale.main, 60, 20,
+	function(_)
 		RandomRoll(1,llrSettings.mainRoll);
 		toggleButtons(false);
 	end
 );
 
-LPTLootRoll_LeaderWindow.rollFrame.offSpeccButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -24, locale.off, 60, 20, 
-	function(self) 
+LPTLootRoll_LeaderWindow.rollFrame.offSpeccButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -24, locale.off, 60, 20,
+	function(_)
 		RandomRoll(1,llrSettings.offRoll);
 		toggleButtons(false);
 	end
 );
 
-LPTLootRoll_LeaderWindow.rollFrame.mogButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -48, locale.mog, 60, 20, 
-	function(self) 
+LPTLootRoll_LeaderWindow.rollFrame.mogButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -48, locale.mog, 60, 20,
+	function(_)
 		RandomRoll(1,llrSettings.mogRoll);
 		toggleButtons(false);
 	end
 );
 
-LPTLootRoll_LeaderWindow.rollFrame.otherButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -72, locale.other, 60, 20, 
-	function(self) 
+LPTLootRoll_LeaderWindow.rollFrame.otherButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -72, locale.other, 60, 20,
+	function(_)
 		StaticPopup_Show("LPTLootRoll_ManualRoll");
 	end
 );
 
-LPTLootRoll_LeaderWindow.rollFrame.passButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -96, locale.pass, 60, 20, 
-	function(self) 
+LPTLootRoll_LeaderWindow.rollFrame.passButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -96, locale.pass, 60, 20,
+	function(_)
 		C_ChatInfo.SendAddonMessage("LPTLootRoll", variables.itemPrefixKey .. "-" .. variables.itemPassKey, "RAID");
 		toggleButtons(false);
 	end
@@ -292,8 +291,8 @@ LPTLootRoll_LeaderWindow.historyButtonFrame.pageNumber = LPTLootRoll_LeaderWindo
 LPTLootRoll_LeaderWindow.historyButtonFrame.pageNumber:SetFontObject("GameFontHighLight");
 LPTLootRoll_LeaderWindow.historyButtonFrame.pageNumber:SetPoint("RIGHT", LPTLootRoll_LeaderWindow.historyButtonFrame, "RIGHT", -50, 6);
 
-LPTLootRoll_LeaderWindow.historyButtonFrame.nextHistoryPage 	= functions.startButton(LPTLootRoll_LeaderWindow.historyButtonFrame, "CENTER", "TOP", 0, 0, ">", 20, 20, function(self) scrollHistory(true) end);
-LPTLootRoll_LeaderWindow.historyButtonFrame.previousHistoryPage = functions.startButton(LPTLootRoll_LeaderWindow.historyButtonFrame, "CENTER", "TOP", -22, 0, "<", 20, 20, function(self) scrollHistory(false) end);
+LPTLootRoll_LeaderWindow.historyButtonFrame.nextHistoryPage 	= functions.startButton(LPTLootRoll_LeaderWindow.historyButtonFrame, "CENTER", "TOP", 0, 0, ">", 20, 20, function(_) scrollHistory(true) end);
+LPTLootRoll_LeaderWindow.historyButtonFrame.previousHistoryPage = functions.startButton(LPTLootRoll_LeaderWindow.historyButtonFrame, "CENTER", "TOP", -22, 0, "<", 20, 20, function(_) scrollHistory(false) end);
 
 LPTLootRoll_LeaderWindow.historyButtonFrame.nextHistoryPage:Disable();
 LPTLootRoll_LeaderWindow.historyButtonFrame.previousHistoryPage:Disable();
@@ -385,7 +384,7 @@ function functions.controlRollListener()
 	if llrSettings.eventMode or LPTLootRoll_LeaderWindow:IsShown() then
 		LPTLootRoll_LeaderWindow:RegisterEvent("CHAT_MSG_SYSTEM");
 	else
-		LPTLootRoll_LeaderWindow:UnregisterEvent("CHAT_MSG_SYSTEM"); 
+		LPTLootRoll_LeaderWindow:UnregisterEvent("CHAT_MSG_SYSTEM");
 	end
 end
 

@@ -1,7 +1,7 @@
-## Interface: 100100
+## Interface: 100105
 ## Title: LPT Loot Roll
 ## Author: Actuarius
-## Version: 2.2.3
+## Version: 2.2.4
 ## SavedVariables: llrSettings, rollHistoryDB
 
 core\init.lua

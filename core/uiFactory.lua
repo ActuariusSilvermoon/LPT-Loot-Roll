@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local variables = namespace.variables;
 local functions = namespace.functions;
 local locale = namespace.locale;
@@ -85,16 +85,16 @@ function functions.scrollFrameFactory(frame, config, xValue, yValue, title, widt
 	scrollBar.scrollStep = 1;
 	frame.scrollBar = scrollBar;
 
-	scrollBar:SetScript("OnValueChanged", 
-		function(self, value)
+	scrollBar:SetScript("OnValueChanged",
+		function(_, value)
 			messageFrame:SetScrollOffset(select(2, scrollBar:GetMinMaxValues()) - value);
 		end
 	);
 
 	scrollBar:SetValue(0);
 
-	frame:SetScript("OnMouseWheel", 
-		function(self, delta)
+	frame:SetScript("OnMouseWheel",
+		function(_, delta)
 			local cur_val = scrollBar:GetValue();
 			local min_val, max_val = scrollBar:GetMinMaxValues();
 
@@ -142,8 +142,8 @@ function functions.editBoxFactory(frame, frameEditbox, parent, x, y, title, link
 	end);
 
 	if linkedFrame then
-		frame.editBox:SetScript("OnKeyDown", 
-			function (self, key)
+		frame.editBox:SetScript("OnKeyDown",
+			function (_, key)
 				if key == "TAB" then
 					linkedFrame.editBox:SetFocus();
 				end
@@ -161,10 +161,10 @@ function functions.sliderFactory(frame, frameSlider, x, y, title)
 	frameSlider:SetOrientation("HORIZONTAL");
 	frameSlider.stepValue = 0.1;
 	frameSlider:SetValueStep(frameSlider.stepValue);
-	
+
 	_G[frameSlider:GetName().."Low"]:SetText("0.5");
 	_G[frameSlider:GetName().."High"]:SetText("2");
-	
+
 	frameSlider.title = frameSlider:CreateFontString(nil, "OVERLAY");
 	frameSlider.title:SetFontObject("GameFontHighLight");
 	frameSlider.title:SetPoint("CENTER", frameSlider, "CENTER", 0, 30);

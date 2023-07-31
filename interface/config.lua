@@ -3,13 +3,12 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local functions = namespace.functions;
 local variables = namespace.variables;
 local locale = namespace.locale;
 
 local LPTLootRoll_ConfigWindow = CreateFrame("FRAME", "LPTLootRoll_Config", UIParent);
-local loadFrame = CreateFrame("FRAME");
 
 --Add config to standard wow interface window.
 local category = Settings.RegisterCanvasLayoutCategory(LPTLootRoll_ConfigWindow, "LPT Loot Roll");
@@ -198,7 +197,7 @@ LPTLootRoll_ConfigWindow.itemListScaleSlider 	= CreateFrame("Slider", "LLR_Item_
 --Use factories to create the sliders, however add script outside of it as to prevent errors involving llrSettings global variable.
 functions.sliderFactory(LPTLootRoll_ConfigWindow, LPTLootRoll_ConfigWindow.itemListScaleSlider, -12, 170, locale.itemListScaleTitle);
 LPTLootRoll_ConfigWindow.itemListScaleSlider:SetScript("OnValueChanged", 
-	function (self, value)
+	function (_, value)
 		llrSettings.itemListScale = sliderCalc(LPTLootRoll_ConfigWindow.itemListScaleSlider, value);
 		functions.updateItemListScale();
 	end
@@ -206,7 +205,7 @@ LPTLootRoll_ConfigWindow.itemListScaleSlider:SetScript("OnValueChanged",
 
 functions.sliderFactory(LPTLootRoll_ConfigWindow, LPTLootRoll_ConfigWindow.userScaleSlider, -12, 100, locale.userWindowScaleTitle);
 LPTLootRoll_ConfigWindow.userScaleSlider:SetScript("OnValueChanged", 
-	function (self, value)
+	function (_, value)
 		llrSettings.userScale = sliderCalc(LPTLootRoll_ConfigWindow.userScaleSlider, value);
 		functions.updateUserScale();
 	end
@@ -214,7 +213,7 @@ LPTLootRoll_ConfigWindow.userScaleSlider:SetScript("OnValueChanged",
 
 functions.sliderFactory(LPTLootRoll_ConfigWindow, LPTLootRoll_ConfigWindow.leaderScaleSlider, -12, 30, locale.leaderWindowScaleTitle);
 LPTLootRoll_ConfigWindow.leaderScaleSlider:SetScript("OnValueChanged", 
-	function (self, value)
+	function (_, value)
 		llrSettings.leaderScale = sliderCalc(LPTLootRoll_ConfigWindow.leaderScaleSlider, value);
 		functions.updateLeaderScale();
 	end
@@ -222,13 +221,13 @@ LPTLootRoll_ConfigWindow.leaderScaleSlider:SetScript("OnValueChanged",
 
 LPTLootRoll_ConfigWindow:Hide();
 LPTLootRoll_ConfigWindow:SetScript("OnShow",
-	function(self)
+	function(_)
 		functions.updateConfigWindow();
 	end
 );
 
 LPTLootRoll_ConfigWindow:SetScript("OnHide",
-	function(self)
+	function(_)
 		saveData();
 	end
 );
@@ -237,7 +236,7 @@ LPTLootRoll_ConfigWindow:SetScript("OnHide",
 LPTLootRoll_ConfigWindow.historySettingFrame.editBox:SetMaxLetters(2);
 
 --Create the share button.
-LPTLootRoll_ConfigWindow.shareButton = functions.startButton(LPTLootRoll_ConfigWindow, "TOPRIGHT", "TOPRIGHT", -12, -30, locale.shareButtonTitle, 120, 30, function(self) shareSettings() end);
+LPTLootRoll_ConfigWindow.shareButton = functions.startButton(LPTLootRoll_ConfigWindow, "TOPRIGHT", "TOPRIGHT", -12, -30, locale.shareButtonTitle, 120, 30, function(_) shareSettings() end);
 
 --Create share button tooltip.
 LPTLootRoll_ConfigWindow.shareButton:SetScript("OnEnter",
@@ -253,10 +252,10 @@ end);
 LPTLootRoll_ConfigWindow.shareButton:SetScript("OnLeave", functions.hideGametoolTip);
 
 --Create the clear data button.
-LPTLootRoll_ConfigWindow.clearData = functions.startButton(LPTLootRoll_ConfigWindow, "TOPRIGHT", "TOPRIGHT", -12, -70, locale.clearDataButtonTitle, 120, 30, function(self) StaticPopup_Show("LPTLootRoll_ClearHistory") end);
+LPTLootRoll_ConfigWindow.clearData = functions.startButton(LPTLootRoll_ConfigWindow, "TOPRIGHT", "TOPRIGHT", -12, -70, locale.clearDataButtonTitle, 120, 30, function(_) StaticPopup_Show("LPTLootRoll_ClearHistory") end);
 
 --Create the reset position button.
-LPTLootRoll_ConfigWindow.resetPosition = functions.startButton(LPTLootRoll_ConfigWindow, "TOPRIGHT", "TOPRIGHT", -12, -110, locale.resetPositionButtonTitle, 120, 30, function(self) StaticPopup_Show("LPTLootRoll_ResetPosition") end);
+LPTLootRoll_ConfigWindow.resetPosition = functions.startButton(LPTLootRoll_ConfigWindow, "TOPRIGHT", "TOPRIGHT", -12, -110, locale.resetPositionButtonTitle, 120, 30, function(_) StaticPopup_Show("LPTLootRoll_ResetPosition") end);
 
 
 -----------------------
@@ -278,7 +277,7 @@ function functions.updateConfigWindow()
 	LPTLootRoll_ConfigWindow.userScaleSlider:SetValue(llrSettings.userScale);
 	LPTLootRoll_ConfigWindow.leaderScaleSlider:SetValue(llrSettings.leaderScale);
 	LPTLootRoll_ConfigWindow.itemListScaleSlider:SetValue(llrSettings.itemListScale);
-	
+
 	_G["LPTLootRoll_LeadMode"]:SetChecked(llrSettings.leadMode);
 	_G["LPTLootRoll_ScrollMode"]:SetChecked(llrSettings.scrollMode);
 	_G["LPTLootRoll_SaveMode"]:SetChecked(llrSettings.saveMode);

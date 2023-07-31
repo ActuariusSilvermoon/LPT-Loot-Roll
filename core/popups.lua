@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local variables = namespace.variables;
 local functions = namespace.functions;
 local locale = namespace.locale;
@@ -22,7 +22,7 @@ local function sendTradeableFunc(self)
 
 	if UnitPlayerOrPetInRaid(input) then
 		local _, link = GetItemInfo(self.data);
-		
+
 		if input == variables.playerName then
 			functions.registerItem(input, link);
 		else
@@ -44,8 +44,8 @@ local function manualRoll(self)
 	if number then
 		functions.hideUser();
 		functions.disableLeader();
-		
-		RandomRoll(1,number);
+
+		RandomRoll(1, number);
 	end
 
 	self:Hide();
@@ -68,7 +68,7 @@ local function sendWhisperNotification(owner, winner, item, rollType)
 		functions.printOut(locale.ownerOrWinnerNotInGroup);
 		return;
 	end
-	
+
 	--Edit the names to include the realm name if they are on a different server than you.
 	owner = realmCheck(owner);
 	winner = realmCheck(winner);
@@ -94,7 +94,7 @@ end
 local function sendRaidWarningNotification(owner, winner, item, rollType)
 	local itemName = GetItemInfo(item);
 
-	local msg = 
+	local msg =
 	(
 		owner == winner and 
 			locale.raidWarningOwnerKeeps(owner, itemName)
@@ -112,32 +112,32 @@ end
 
 
 --Pop up for manual rolls.
-StaticPopupDialogs["LPTLootRoll_ManualRoll"] = 
+StaticPopupDialogs["LPTLootRoll_ManualRoll"] =
 {
 	text = locale.manualRollText,
 	button1 = locale.acceptButton,
 	button2 = locale.cancelButton,
 	hasEditBox = 1,
 	maxLetters = 4,
-	OnShow = 
-	function(self)
-		local editBox = self.editBox;
-		editBox:SetText("");
-		editBox:SetFocus();
-		editBox:SetNumeric(true);
-	end,
-	OnAccept = 
-	function(self)
-		manualRoll(self);
-	end,
-	EditBoxOnEnterPressed = 
-	function(self)
-		manualRoll(self:GetParent());
-	end,
-	EditBoxOnEscapePressed = 
-	function(self)
-		self:GetParent():Hide();
-	end,
+	OnShow =
+		function(self)
+			local editBox = self.editBox;
+			editBox:SetText("");
+			editBox:SetFocus();
+			editBox:SetNumeric(true);
+		end,
+	OnAccept =
+		function(self)
+			manualRoll(self);
+		end,
+	EditBoxOnEnterPressed =
+		function(self)
+			manualRoll(self:GetParent());
+		end,
+	EditBoxOnEscapePressed =
+		function(self)
+			self:GetParent():Hide();
+		end,
 	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = 1
@@ -149,24 +149,24 @@ StaticPopupDialogs["LPTLootRoll_ClearHistory"] =
 	text = locale.clearHistoryText,
 	button1 = locale.acceptButton,
 	button2 = locale.cancelButton,
-	OnAccept = 
-	function(self)
-		functions.resetItemAndRollHistory();
-		functions.printOut(locale.clearHistoryOutput);
-	end,
+	OnAccept =
+		function(_)
+			functions.resetItemAndRollHistory();
+			functions.printOut(locale.clearHistoryOutput);
+		end,
 	timeout = 0,
 	whileDead = 1,
 	hideOnEscape = 1
 };
 
 --Pop up for resetting locations.
-StaticPopupDialogs["LPTLootRoll_ResetPosition"] = 
+StaticPopupDialogs["LPTLootRoll_ResetPosition"] =
 {
 	text = locale.resetPositionText,
 	button1 = locale.acceptButton,
 	button2 = locale.cancelButton,
-	OnAccept = 
-	function(self)
+	OnAccept =
+	function(_)
 		functions.resetUserWindow();
         functions.resetLeaderWindow();
         functions.resetItemListWindow();
@@ -186,7 +186,7 @@ StaticPopupDialogs["LPTLootRoll_SendTradeable"] =
 	hasItemFrame = 1,
 	hasEditBox = 1,
 	maxLetters = 24,
-	OnShow = 
+	OnShow =
 	function(self)
 		local editBox = self.editBox;
 
@@ -203,22 +203,22 @@ StaticPopupDialogs["LPTLootRoll_SendTradeable"] =
 		editBox:SetAutoFocus(false);
 		editBox:ClearFocus();
 	end,
-	OnAccept = 
-	function(self)
-		sendTradeableFunc(self);
-	end,
-	EditBoxOnEnterPressed = 
-	function(self)
-		sendTradeableFunc(self:GetParent());
-	end,
-	EditBoxOnEscapePressed = 
-	function(self)
-		self:ClearFocus();
-	end,
-	OnHide = 
-	function(self)
-		functions.popTradeable();
-	end,
+	OnAccept =
+		function(self)
+			sendTradeableFunc(self);
+		end,
+	EditBoxOnEnterPressed =
+		function(self)
+			sendTradeableFunc(self:GetParent());
+		end,
+	EditBoxOnEscapePressed =
+		function(self)
+			self:ClearFocus();
+		end,
+	OnHide =
+		function(self)
+			functions.popTradeable();
+		end,
 	timeout = 0,
 	whileDead = 1,
 	noCancelOnReuse = 1,
@@ -231,22 +231,22 @@ StaticPopupDialogs["LPTLootRoll_SettingShare"] = {
 	button1 = locale.acceptButton,
 	button2 = locale.cancelButton,
 	OnAccept = 
-	function(self, msg)
+	function(_, msg)
 		--If user accepts the data, parse it to numbers and store it in settings.
 		local main, off, mog = strsplit("-", msg);
 
 		main = tonumber(main);
 		off  = tonumber(off);
 		mog  = tonumber(mog);
-		
+
 		if not (main and off and mog) then
 			return;
 		end
-		
+
 		llrSettings.mainRoll = main;
 		llrSettings.offRoll = off;
 		llrSettings.mogRoll = mog;
-	
+
 		functions.printOut(locale.settingShareOutput)
 		functions.printOut(locale.main .. ": " .. main);
 		functions.printOut(locale.off .. ": " .. off);
@@ -264,7 +264,7 @@ StaticPopupDialogs["LPTLootRoll_DistributeItem"] =
 	button1 = locale.acceptButton,
 	button2 = locale.cancelButton,
 	OnAccept = 
-	function(self, msg)
+	function(_, msg)
 		local winner, rollType = strsplit("-", msg);
 
 		if not winner or not rollType then

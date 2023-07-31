@@ -2,7 +2,7 @@
 -------VARIABLES-------
 -----------------------
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local variables = {};
 local functions = {};
 local locale = {};
@@ -23,8 +23,8 @@ local loadFrame = CreateFrame("FRAME");
 --Initial check to see if addon variables exist, if they don't, create them.
 loadFrame:RegisterEvent("ADDON_LOADED");
 
-loadFrame:SetScript("OnEvent", 
-	function(self, event, addonName, ...)
+loadFrame:SetScript("OnEvent",
+	function(_, event, addonName, ...)
 		if event == "ADDON_LOADED" and addonName == "LPT Loot Roll" then
 			--Main setting table.
 			if not llrSettings then 
@@ -116,7 +116,7 @@ loadFrame:SetScript("OnEvent",
 				variables.rollHistory = rollHistoryDB.rollHistory;
 
 				--Pre cache history items.
-				for i, v in ipairs(variables.rollHistory) do
+				for _, v in ipairs(variables.rollHistory) do
 					GetItemInfo(v.item);
 				end
 			end

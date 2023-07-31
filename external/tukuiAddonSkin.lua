@@ -5,6 +5,7 @@ end
 local AS, L, S, R = unpack(AddOnSkins)
 
 function AS:LPT_Loot_Roll(event, addon)
+
 	--User window
 	S:HandleFrame(LPTLootRoll_User);
 	S:HandleButton(LPTLootRoll_User.mainSpeccButton);
@@ -21,8 +22,10 @@ function AS:LPT_Loot_Roll(event, addon)
 	S:HandleButton(LPTLootRoll_Leader.rollFrame.otherButton);
 	S:HandleButton(LPTLootRoll_Leader.rollFrame.passButton);
 
-	S:HandleButton(LPTLootRoll_Leader.historyButtonFrame.nextHistoryPage);
-	S:HandleButton(LPTLootRoll_Leader.historyButtonFrame.previousHistoryPage);
+	LPTLootRoll_Leader.historyButtonFrame.nextHistoryPage:SetText("");
+	S:HandleNextPrevButton(LPTLootRoll_Leader.historyButtonFrame.nextHistoryPage);
+	LPTLootRoll_Leader.historyButtonFrame.previousHistoryPage:SetText("");
+	S:HandleNextPrevButton(LPTLootRoll_Leader.historyButtonFrame.previousHistoryPage);
 
 	S:HandleFrame(LPTLootRoll_Leader.mainFrame.messageFrame);
 	S:HandleFrame(LPTLootRoll_Leader.offFrame.messageFrame);

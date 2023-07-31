@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...
+local _, namespace = ...
 local functions = namespace.functions;
 local variables = namespace.variables;
 local locale = namespace.locale;
@@ -44,28 +44,28 @@ LPTLootRoll_UserWindow.itemButton:SetSize(60,60);
 
 --Intialize the buttons.
 LPTLootRoll_UserWindow.mainSpeccButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 0, -40, locale.main, 60, 30, 
-	function(self) 
+	function(_)
 		RandomRoll(1,llrSettings.mainRoll);
 		LPTLootRoll_UserWindow:Hide();
 	end
 );
 
 LPTLootRoll_UserWindow.offSpeccButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 0, -70, locale.off, 60, 30, 
-	function(self) 
-		RandomRoll(1,llrSettings.offRoll); 
+	function(_)
+		RandomRoll(1,llrSettings.offRoll);
 		LPTLootRoll_UserWindow:Hide();
 	end
 );
 
 LPTLootRoll_UserWindow.mogButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 60, -40, locale.mog, 60, 30, 
-	function(self) 
+	function(_)
 		RandomRoll(1,llrSettings.mogRoll);
 		LPTLootRoll_UserWindow:Hide();
 	end
 );
 
 LPTLootRoll_UserWindow.otherButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 60, -70, locale.other, 60, 30, 
-	function(self) 
+	function(_)
 		StaticPopup_Show("LPTLootRoll_ManualRoll");
 	end
 );
@@ -89,7 +89,7 @@ function functions.userEvent(link, owner)
 	--Setup the item "frame" with tooltip, mog and artifact system implementation.
 	functions.setItemButtonData(LPTLootRoll_UserWindow.itemButton, link);
 	functions.displayUser();
-	
+
 	LPTLootRoll_UserWindow.title:SetText(locale.userLeaderTitleText(owner));
 end
 
@@ -103,14 +103,14 @@ end
 function functions.displayUser()
 	if not LPTLootRoll_UserWindow:IsShown() then
 		LPTLootRoll_UserWindow:Show();
-	end 
+	end
 end
 
 --Function for hiding the user window.
 function functions.hideUser()
 	if LPTLootRoll_UserWindow:IsShown() then
 		LPTLootRoll_UserWindow:Hide();
-	end 
+	end
 end
 
 --Function for resetting the user window position.

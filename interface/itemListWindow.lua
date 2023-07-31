@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...
+local _, namespace = ...
 local functions = namespace.functions;
 local variables = namespace.variables;
 local locale = namespace.locale;
@@ -64,7 +64,7 @@ end
 
 
 LPTLootRoll_ItemListWindow:SetScript("OnEvent",
-    function(self, event, ...)
+    function(_, event, ...)
         variables.events[event](...);
     end
 );
@@ -102,8 +102,8 @@ LPTLootRoll_ItemListWindow.tipText:SetText("|cFFFFFF00" .. locale.ctrlClickHelpT
 
 
 --Next item button.
-LPTLootRoll_ItemListWindow.nextItemButton = functions.startButton(LPTLootRoll_ItemListWindow, "TOPRIGHT", "TOP", 0, -22, locale.postButtonTitle, (LPTLootRoll_ItemListWindow:GetWidth()-13)/2, 30, 
-function(self)
+LPTLootRoll_ItemListWindow.nextItemButton = functions.startButton(LPTLootRoll_ItemListWindow, "TOPRIGHT", "TOP", 0, -22, locale.postButtonTitle, (LPTLootRoll_ItemListWindow:GetWidth()-13)/2, 30,
+function(_)
     functions.popList(1, true);
 end
 );
@@ -112,8 +112,8 @@ LPTLootRoll_ItemListWindow.nextItemButton:Disable();
 
 
 --Skip item button
-LPTLootRoll_ItemListWindow.skipItemButton = functions.startButton(LPTLootRoll_ItemListWindow, "TOPLEFT", "TOP", 0, -22, locale.skipButtonTitle, (LPTLootRoll_ItemListWindow:GetWidth()-13)/2, 30, 
-function(self) 
+LPTLootRoll_ItemListWindow.skipItemButton = functions.startButton(LPTLootRoll_ItemListWindow, "TOPLEFT", "TOP", 0, -22, locale.skipButtonTitle, (LPTLootRoll_ItemListWindow:GetWidth()-13)/2, 30,
+function(_)
     functions.popList();
 end
 );
@@ -170,16 +170,16 @@ function functions.registerItem(sender, item)
     end
 
     tinsert(
-        variables.itemsToRoll, 
+        variables.itemsToRoll,
         {
-            sender, 
-            itemLink, 
+            sender,
+            itemLink,
             functions.getClassColor(sender)
         }
     );
 
     table.sort(
-        variables.itemsToRoll, 
+        variables.itemsToRoll,
         function(a, b)
             if a[2] > b[2] then
                 return false;

@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local variables = namespace.variables;
 local functions = namespace.functions;
 local locale = namespace.locale;
@@ -43,7 +43,7 @@ variables.commandArray =
 	},
 	[locale.commandArrayItemTitle] =
 	{
-		func = 
+		func =
 			function()
 				functions.displayItemList();
 			end,

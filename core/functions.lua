@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local variables = namespace.variables;
 local functions = namespace.functions;
 local locale = namespace.locale;
@@ -23,7 +23,7 @@ SLASH_LPT1 = "/lpt";
 SLASH_LPT2 = "/lptlootroll";
 SLASH_LPT3 = "/llr";
 
-SlashCmdList.LPT = 
+SlashCmdList.LPT =
 function(msg)
 	msg = strlower(msg);
 
@@ -79,7 +79,7 @@ ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", filterFunction);
 
 --Get data from the custom hyperlinks.
 hooksecurefunc("SetItemRef",
-	function(link, text)
+	function(link, _)
 		local linkType, addon, param1 = strsplit(":", link);
 
 		if linkType ~= "garrmission" or addon ~= "lptlootroll" then
@@ -139,7 +139,7 @@ end
 
 --Custom printout method for yellow message printouts.
 function functions.printOut(msg)
-	DEFAULT_CHAT_FRAME:AddMessage(msg,1,1,0);
+	DEFAULT_CHAT_FRAME:AddMessage(msg, 1, 1, 0);
 end
 
 --Input the current item into the roll frame.
@@ -159,7 +159,7 @@ function functions.setItemButtonData(frame, link)
 	frame:SetNormalTexture(select(10,GetItemInfo(link)));
 
 	frame:SetScript("OnEnter",
-		function(self) 
+		function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_CURSOR");
 			GameTooltip:ClearLines();
 			GameTooltip:SetHyperlink(link);
@@ -222,7 +222,7 @@ function functions.usableMog(link)
 
 	if sources and collectable then
 		for i, v in pairs(sources) do
-			if v.isCollected then 
+			if v.isCollected then
 				return false;
 			end
 		end
@@ -301,8 +301,8 @@ function functions.tooltipHasRedText()
 		rg = floor(rg * 100 + 0.5) / 100
 		rb = floor(rb * 100 + 0.5) / 100
 
-		if 
-			lr == 1 and lg == 0.13 and lb == 0.13 or 
+		if
+			lr == 1 and lg == 0.13 and lb == 0.13 or
 			rr == 1 and rg == 0.13 and rb == 0.13
 		then
 			return true;
@@ -314,7 +314,7 @@ end
 
 --Function for popping a tradeable item for the pop up of looted items.
 function functions.popTradeable()
-	if #variables.tradeableItemsQueue == 0 then 
+	if #variables.tradeableItemsQueue == 0 then
 		return;
 	end
 
@@ -350,7 +350,7 @@ end
 
 --Function for printing debug history.
 function functions.printDebugHistory()
-	for i, v in pairs(variables.debugHistory) do
+	for _, v in pairs(variables.debugHistory) do
 		functions.printOut(v[1] .. ": " .. v[2]);
 	end
 end

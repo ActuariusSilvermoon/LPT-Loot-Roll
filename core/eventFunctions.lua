@@ -3,7 +3,7 @@
 -----------------------
 
 
-local ADDON_NAME, namespace = ...;
+local _, namespace = ...;
 local variables = namespace.variables;
 local functions = namespace.functions;
 local locale = namespace.locale;
@@ -17,9 +17,9 @@ local trimmedString = escapePatternSymbols(BIND_TRADE_TIME_REMAINING):gsub("%%%%
 -----------------------
 
 
-variables.events = 
+variables.events =
 {
-    ["ENCOUNTER_LOOT_RECEIVED"] = 
+    ["ENCOUNTER_LOOT_RECEIVED"] =
     function(...)
         local _, _, item, _, name = ...;
 
@@ -304,7 +304,7 @@ variables.events =
 
         --Sort table based primarly by roll number, secondly by name.
         table.sort(
-            determinedArray, 
+            determinedArray,
             function(a, b)
                 if a[2] > b[2] then
                     return true;
