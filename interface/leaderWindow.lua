@@ -250,21 +250,21 @@ LPTLootRoll_LeaderWindow.rollFrame:SetPoint("BOTTOMLEFT", LPTLootRoll_LeaderWind
 --Start instance of raid leader buttons.
 LPTLootRoll_LeaderWindow.rollFrame.mainSpeccButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, 0, locale.main, 60, 20,
 	function(_)
-		RandomRoll(1,llrSettings.mainRoll);
+		RandomRoll(1, llrSettings.mainRoll);
 		toggleButtons(false);
 	end
 );
 
 LPTLootRoll_LeaderWindow.rollFrame.offSpeccButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -24, locale.off, 60, 20,
 	function(_)
-		RandomRoll(1,llrSettings.offRoll);
+		RandomRoll(1, llrSettings.offRoll);
 		toggleButtons(false);
 	end
 );
 
 LPTLootRoll_LeaderWindow.rollFrame.mogButton = functions.startButton(LPTLootRoll_LeaderWindow.rollFrame, "TOPLEFT", "TOPLEFT", 0, -48, locale.mog, 60, 20,
 	function(_)
-		RandomRoll(1,llrSettings.mogRoll);
+		RandomRoll(1, llrSettings.mogRoll);
 		toggleButtons(false);
 	end
 );

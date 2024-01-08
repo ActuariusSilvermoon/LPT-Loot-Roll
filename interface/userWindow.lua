@@ -45,21 +45,21 @@ LPTLootRoll_UserWindow.itemButton:SetSize(60,60);
 --Intialize the buttons.
 LPTLootRoll_UserWindow.mainSpeccButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 0, -40, locale.main, 60, 30, 
 	function(_)
-		RandomRoll(1,llrSettings.mainRoll);
+		RandomRoll(1, llrSettings.mainRoll);
 		LPTLootRoll_UserWindow:Hide();
 	end
 );
 
 LPTLootRoll_UserWindow.offSpeccButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 0, -70, locale.off, 60, 30, 
 	function(_)
-		RandomRoll(1,llrSettings.offRoll);
+		RandomRoll(1, llrSettings.offRoll);
 		LPTLootRoll_UserWindow:Hide();
 	end
 );
 
 LPTLootRoll_UserWindow.mogButton = functions.startButton(LPTLootRoll_UserWindow, "CENTER", "TOP", 60, -40, locale.mog, 60, 30, 
 	function(_)
-		RandomRoll(1,llrSettings.mogRoll);
+		RandomRoll(1, llrSettings.mogRoll);
 		LPTLootRoll_UserWindow:Hide();
 	end
 );

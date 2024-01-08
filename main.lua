@@ -20,7 +20,7 @@ LPTLootRoll_MainFrame:RegisterEvent("CHAT_MSG_RAID_WARNING");
 LPTLootRoll_MainFrame:RegisterEvent('GROUP_ROSTER_UPDATE');
 LPTLootRoll_MainFrame:RegisterEvent("CHAT_MSG_ADDON");
 
-LPTLootRoll_MainFrame:SetScript("OnEvent", 
+LPTLootRoll_MainFrame:SetScript("OnEvent",
 	function(self, event, ...)
 		variables.events[event](...);
 	end
