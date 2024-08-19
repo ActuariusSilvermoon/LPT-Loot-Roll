@@ -151,7 +151,7 @@ configLogo:SetPoint("CENTER", 0, 0);
 LPTLootRoll_ConfigWindow.title = LPTLootRoll_ConfigWindow:CreateFontString(nil,"OVERLAY");
 LPTLootRoll_ConfigWindow.title:SetFontObject("GameFontNormalLarge");
 LPTLootRoll_ConfigWindow.title:SetPoint("CENTER", LPTLootRoll_ConfigWindow, "CENTER", 0, -140);
-LPTLootRoll_ConfigWindow.title:SetText("Version: " .. GetAddOnMetadata("LPT Loot Roll", "Version"));
+LPTLootRoll_ConfigWindow.title:SetText("Version: " .. C_AddOns.GetAddOnMetadata("LPT Loot Roll", "Version"));
 
 --Create checkboxes.
 functions.checkButtonFactory("LPTLootRoll_LeadMode", LPTLootRoll_ConfigWindow, 12, -30, locale.leadModeTitle, locale.leadModeDescription);
