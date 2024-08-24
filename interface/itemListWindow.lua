@@ -19,10 +19,10 @@ local LPTLootRoll_ItemListWindow = CreateFrame("Frame", "LPTLootRoll_ItemList", 
 --Add array to frame function.
 local function addArrayToFrame()
     for i,v in ipairs(variables.itemsToRoll) do 
-        local itemName, _, quality = GetItemInfo(v[2]);
+        local itemName, _, quality = C_Item.GetItemInfo(v[2]);
         local remainingChars = 30-strlen(v[1]);
         local itemLength = strlen(itemName);
-        local _, _, _, hexCode = GetItemQualityColor(quality);
+        local _, _, _, hexCode = C_Item.GetItemQualityColor(quality);
         local shortLink = "|c" .. hexCode .. "[" .. strsub(itemName, 1, remainingChars) .. (itemLength > remainingChars and ".." or "]");
 
 		LPTLootRoll_ItemListWindow.itemFrame.messageFrame:AddMessage("|Hgarrmission:lptlootroll:rollItem&" .. i .."|h|c" .. v[3] .. v[1] .. " - " .. shortLink .. "|h|r");
@@ -163,7 +163,7 @@ function functions.registerItem(sender, item)
         return;
     end
 
-    local _, itemLink = GetItemInfo(item);
+    local _, itemLink = C_Item.GetItemInfo(item);
 
     if not itemLink then
         return;

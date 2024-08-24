@@ -1,4 +1,4 @@
-if not IsAddOnLoaded("AddonSkins") then
+if not C_AddOns.IsAddOnLoaded("AddonSkins") then
 	return;
 end
 

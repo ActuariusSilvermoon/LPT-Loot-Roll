@@ -21,7 +21,7 @@ local function sendTradeableFunc(self)
 	local input = self.editBox:GetText();
 
 	if UnitPlayerOrPetInRaid(input) then
-		local _, link = GetItemInfo(self.data);
+		local _, link = C_Item.GetItemInfo(self.data);
 
 		if input == variables.playerName then
 			functions.registerItem(input, link);
@@ -92,7 +92,7 @@ end
 
 --Function for sending winenr in raid warning.
 local function sendRaidWarningNotification(owner, winner, item, rollType)
-	local itemName = GetItemInfo(item);
+	local itemName = C_Item.GetItemInfo(item);
 
 	local msg =
 	(

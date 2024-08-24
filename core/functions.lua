@@ -33,7 +33,7 @@ function(msg)
 	end
 
 	print("");
-	functions.printOut(GetAddOnMetadata("LPT Loot Roll", "Title") .. " version: " .. GetAddOnMetadata("LPT Loot Roll", "Version"));
+	functions.printOut(C_AddOns.GetAddOnMetadata("LPT Loot Roll", "Title") .. " version: " .. C_AddOns.GetAddOnMetadata("LPT Loot Roll", "Version"));
 
 	if msg and msg ~= "" then
 		functions.printOut(locale.commandNotRecognized);
@@ -156,7 +156,7 @@ function functions.setItemButtonData(frame, link)
 		end
 	);
 
-	frame:SetNormalTexture(select(10,GetItemInfo(link)));
+	frame:SetNormalTexture(select(10, C_Item.GetItemInfo(link)));
 
 	frame:SetScript("OnEnter",
 		function(self)
@@ -190,7 +190,7 @@ end
 
 --Function for calculating scaling value. When scaling for screens with a higher Y resolution than 1200, you have to take parentscale into the account for it to scale properly.
 function functions.calculateScale()
-	local yResolution = tonumber(strmatch(GetCVar("gxWindowedResolution"), "%d+x(%d+)"));
+	local yResolution = tonumber(strmatch(C_CVar.GetCVar("gxWindowedResolution"), "%d+x(%d+)"));
 	local parentScale = UIParent:GetScale();
 
 	return 768/yResolution/(yResolution > 1200 and parentScale or 1);
@@ -221,7 +221,7 @@ function functions.usableMog(link)
 	local sources = C_TransmogCollection.GetAppearanceSources(appearId);
 
 	if sources and collectable then
-		for i, v in pairs(sources) do
+		for _, v in pairs(sources) do
 			if v.isCollected then
 				return false;
 			end
@@ -233,7 +233,7 @@ end
 
 --Get the main stats of the item.
 function functions.getItemValues(link)
-	local valueTable = GetItemStats(link);
+	local valueTable = C_Item.GetItemStats(link);
 
 	local itemValues = {
 		agility 	= valueTable["ITEM_MOD_AGILITY_SHORT"] ~= nil,
@@ -319,7 +319,7 @@ function functions.popTradeable()
 	end
 
 	local head = tremove(variables.tradeableItemsQueue, 1);
-	local itemName, link, _, _, _, _, _, _, _, itemIcon = GetItemInfo(head);
+	local itemName, link, _, _, _, _, _, _, _, itemIcon = C_Item.GetItemInfo(head);
 	local data = {["name"] = itemName, ["link"] = link, ["texture"] = itemIcon};
 	local dialog = StaticPopup_Show("LPTLootRoll_SendTradeable", link, _, data);
 

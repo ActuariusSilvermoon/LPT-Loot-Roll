@@ -33,7 +33,7 @@ variables.events =
                     for slot = 1, C_Container.GetContainerNumSlots(bag) do
                         local bagLink = C_Container.GetContainerItemLink(bag, slot);
 
-                        if bagLink and GetItemInfo(bagLink) == GetItemInfo(item) then
+                        if bagLink and C_Item.GetItemInfo(bagLink) == C_Item.GetItemInfo(item) then
                             LPTLootRoll_ToolTip:ClearLines();
                             LPTLootRoll_ToolTip:SetBagItem(bag, slot);
 
@@ -79,7 +79,7 @@ variables.events =
             functions.addToDebugHistory("Raid warning item is loaded.");
             functions.resetTooltip();
 
-            local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = GetItemInfo(msg);
+            local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = C_Item.GetItemInfo(msg);
 
             --Stop if no item link is found.
             if link == nil then
@@ -120,6 +120,12 @@ variables.events =
             --Check for pet
             local usabilityVar = isPet;
 
+            --Check if item is a collectable transmog piece.
+            if usabilityVar == nil and functions.usableMog(link) then
+                usabilityVar = true;
+                functions.addToDebugHistory("Item has collectable transmog.");
+            end
+
             --Check for red text in tooltip.
             if usabilityVar == nil then
                 functions.resetTooltip();
@@ -132,6 +138,8 @@ variables.events =
                 elseif isToken then
                     functions.addToDebugHistory("No red text and is token.");
                     usabilityVar = true;
+                else
+                    functions.addToDebugHistory("No red text and is not token.");
                 end
             end
 
@@ -178,15 +186,6 @@ variables.events =
 
                 if usabilityVar then
                     functions.addToDebugHistory("Item is either trinket with no stats or correct stats, or of correct item type with correct stats.");
-                end
-            end
-
-            --Check if item is a collectable transmog piece.
-            if usabilityVar == nil then
-                usabilityVar = functions.usableMog(link);
-
-                if usabilityVar then
-                    functions.addToDebugHistory("Item has collectable transmog.");
                 end
             end
 

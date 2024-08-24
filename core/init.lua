@@ -117,7 +117,7 @@ loadFrame:SetScript("OnEvent",
 
 				--Pre cache history items.
 				for _, v in ipairs(variables.rollHistory) do
-					GetItemInfo(v.item);
+					C_Item.GetItemInfo(v.item);
 				end
 			end
 
