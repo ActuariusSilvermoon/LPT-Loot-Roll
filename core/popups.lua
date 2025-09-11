@@ -18,7 +18,7 @@ local masterLooter = "";
 
 --Function for transmitting the tradeable item to the leader/player's itemList.
 local function sendTradeableFunc(self)
-	local input = self.editBox:GetText();
+	local input = self:GetEditBox():GetText();
 
 	if UnitPlayerOrPetInRaid(input) then
 		local _, link = C_Item.GetItemInfo(self.data);
@@ -39,7 +39,7 @@ end
 
 --Function for handling manual rolls.
 local function manualRoll(self)
-	local number = self.editBox:GetNumber();
+	local number = self:GetEditBox():GetNumber();
 
 	if number then
 		functions.hideUser();
@@ -121,7 +121,7 @@ StaticPopupDialogs["LPTLootRoll_ManualRoll"] =
 	maxLetters = 4,
 	OnShow =
 		function(self)
-			local editBox = self.editBox;
+			local editBox = self:GetEditBox();
 			editBox:SetText("");
 			editBox:SetFocus();
 			editBox:SetNumeric(true);
@@ -188,7 +188,7 @@ StaticPopupDialogs["LPTLootRoll_SendTradeable"] =
 	maxLetters = 24,
 	OnShow =
 	function(self)
-		local editBox = self.editBox;
+		local editBox = self:GetEditBox();
 
 		if llrSettings.masterLooterMode then
 			masterLooter = llrSettings.masterLooter;

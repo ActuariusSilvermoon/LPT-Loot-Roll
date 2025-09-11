@@ -52,12 +52,14 @@ variables.events =
             end
         );
     end,
+
     ["GROUP_ROSTER_UPDATE"] =
     function(...)
         functions.toggleLootListener();
         functions.toggleWhisperListener();
         functions.controlRollListener();
     end,
+
     ["CHAT_MSG_RAID_WARNING"] =
     function(...)
         local msg, author = ...;
@@ -69,6 +71,9 @@ variables.events =
         end
 
         local item = Item:CreateFromItemLink(msg);
+
+        functions.addBlankLineToDebugHistory();
+        functions.addToDebugHistory("New raid warning detected");
 
         if item:IsItemEmpty() then
             functions.addToDebugHistory("Found no item in raid warning.");
@@ -104,7 +109,7 @@ variables.events =
                     )
                 );
 
-            --If not relevant items then stop.
+            --If not relevant item then stop.
             if not
             (
                 itemClassID == 4 or --Armor
@@ -113,7 +118,7 @@ variables.events =
                 isToken             --Item Token
             )
             then
-                functions.addToDebugHistory("Not relevant item.");
+                functions.addToDebugHistory("Item is not armor, weapon, pet or item token.");
                 return;
             end
 
@@ -121,9 +126,21 @@ variables.events =
             local usabilityVar = isPet;
 
             --Check if item is a collectable transmog piece.
-            if usabilityVar == nil and functions.usableMog(link) then
-                usabilityVar = true;
-                functions.addToDebugHistory("Item has collectable transmog.");
+            if usabilityVar == nil then
+                local mogScan = functions.usableMog(link);
+                local mogTooltip = functions.tooltipHasString("You haven't collected this appearance");
+
+                if mogScan or mogTooltip then
+                    if mogScan ~= mogTooltip then
+                        functions.addToDebugHistory("Mog scanner result: " .. (mogScan and "true" or "false"));
+                        functions.addToDebugHistory("Mog tooltip scan result: " .. (mogTooltip and "true" or "false"));
+                    end
+
+                    usabilityVar = true;
+                    functions.addToDebugHistory("Item has collectable transmog.");
+                else
+                    functions.addToDebugHistory("Item does not have collectable transmog.");
+                end
             end
 
             --Check for red text in tooltip.
@@ -213,7 +230,7 @@ variables.events =
 
                 --Insert the new item into the rollhistory array.
                 tinsert(
-                    variables.rollHistory, 
+                    variables.rollHistory,
                     1,
                     {
                         item 		     = link,
@@ -236,6 +253,7 @@ variables.events =
             end
         end)
     end,
+
     ["CHAT_MSG_SYSTEM"] =
     function(...)
         if not variables.rollHistory[1] or variables.rollHistory[1].distributed then
@@ -315,10 +333,14 @@ variables.events =
             end
         );
     end,
+
     ["CHAT_MSG_WHISPER"] =
     function(...)
         local msg, author = ...;
         local name, _ = strsplit("-", author);
+
+        functions.addBlankLineToDebugHistory();
+        functions.addToDebugHistory("New whisper registered");
 
         if UnitPlayerOrPetInRaid(name) then
             local item = Item:CreateFromItemLink(msg);
@@ -330,10 +352,11 @@ variables.events =
 
             item:ContinueOnItemLoad(function()
                 functions.registerItem(name, msg);
-                functions.addToDebugHistory("Item is loaded and registered in loot announcer.");
+                functions.addToDebugHistory("Item from " .. name .. " is loaded and registered in loot announcer.");
             end);
         end
     end,
+
     ["CHAT_MSG_ADDON"] =
     function(...)
         local prefix, msg, _, sender = ...;
@@ -345,11 +368,11 @@ variables.events =
         local key, value = strsplit("-", msg);
 
         if key == variables.itemPrefixKey and variables.rollHistory[1] ~= nil and not variables.rollHistory[1].distributed then
-            local name, realm = strsplit("-", sender);
+            local name, _ = strsplit("-", sender);
 
             if value == variables.itemUsableKey then
                 if #variables.rollHistory[1].potentialRollers > 0 then
-                    for i, v in pairs(variables.rollHistory[1].potentialRollers) do
+                    for i, _ in pairs(variables.rollHistory[1].potentialRollers) do
                         if i == name then
                             return;
                         end

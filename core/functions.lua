@@ -335,7 +335,7 @@ end
 
 --Function for adding data to log.
 function functions.addToDebugHistory(input)
-	while #variables.debugHistory >= 50 do
+	while #variables.debugHistory >= 200 do
 		tremove(variables.debugHistory, 1);
 	end
 
@@ -345,6 +345,14 @@ function functions.addToDebugHistory(input)
 			date("%H:%M:%S"),
 			input
 		}
+	)
+end
+
+--Function for adding a blank splitter row to log.
+function functions.addBlankLineToDebugHistory()
+	tinsert(
+		variables.debugHistory,
+		{"", ""}
 	)
 end
 
