@@ -9,8 +9,7 @@ local functions = namespace.functions;
 local locale = namespace.locale;
 
 --Clean up the trade time remaining string so that it can be used cross locales.
---As seen in the RCLootConcil2 addon (https://github.com/evil-morfar/RCLootCouncil2).
-local trimmedString = escapePatternSymbols(BIND_TRADE_TIME_REMAINING):gsub("%%%%s", "%(%.%+%)");
+local trimmedString = functions.escapePatternSymbols(BIND_TRADE_TIME_REMAINING):gsub("%%%%s", "%(%.%+%)");
 
 -----------------------
 ------EVENT TABLE------

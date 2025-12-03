@@ -362,3 +362,16 @@ function functions.printDebugHistory()
 		functions.printOut(v[1] .. ": " .. v[2]);
 	end
 end
+
+--Reintroduce the escapePatternSymbols function that blizz removed.
+--As seen in the RCLootCouncil2 addon (https://github.com/evil-morfar/RCLootCouncil2).
+local symbols = { "%%", "%*", "%+", "%-", "%?", "%(", "%)", "%[", "%]", "%$", "%^", } --% has to be escaped first or everything is ruined
+local replacements = { "%%%%", "%%%*", "%%%+", "%%%-", "%%%?", "%%%(", "%%%)", "%%%[", "%%%]", "%%%$", "%%%^", }
+
+function functions.escapePatternSymbols(text)
+	for i = 1, #symbols do
+		text = text:gsub(symbols[i], replacements[i])
+	end
+
+	return text
+end
