@@ -8,11 +8,6 @@ local variables = namespace.variables;
 local functions = namespace.functions;
 local locale = namespace.locale;
 
---Create frame to hold tooltip for scanning.
-CreateFrame("GameTooltip", "LPTLootRoll_ToolTip", nil, "GameTooltipTemplate");
-LPTLootRoll_ToolTip:UnregisterAllEvents();
-LPTLootRoll_ToolTip:SetOwner(UIParent, "ANCHOR_NONE");
-
 
 -----------------------
 -----SLASH FUNCTION----
@@ -257,60 +252,83 @@ function functions.usableStats(stats)
 	return agilityUsage or strengthUsage or intellectUsage;
 end
 
---Function to reset LPT tooltip.
-function functions.resetTooltip()
-	for i = 1, LPTLootRoll_ToolTip:NumLines() or 0 do 
-		local left = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextLeft" .. i);
-		local right = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextRight" .. i);
+-- Function to check if an itemlink tooltip has a specific string
+function functions.tooltipHasString(data, searchString)
+    if not data or not data.lines then
+        return false
+    end
 
-		left:SetText();
-		left:SetTextColor(0, 0, 0, 0);
+    local needle = string.lower(searchString)
 
-		right:SetText();
-		right:SetTextColor(0, 0, 0, 0);
-	end
+    for _, line in ipairs(data.lines) do
+        if line.leftText then
+            local haystack = string.lower(line.leftText)
+
+            if haystack:match(needle) then
+                return true
+            end
+        end
+    end
+
+    return false
 end
 
---Function to scan an item's tooltip for a given string.
-function functions.tooltipHasString(searchString)
-	for i = 1, LPTLootRoll_ToolTip:NumLines() or 0 do 
-		local left = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextLeft" .. i);
-		local leftText = left:GetText() or "";
 
-		if strlower(leftText):match(strlower(searchString)) then
-			return true;
-		end
-	end
-
-	return false;
+--Local function to define if color is red.
+local function isRed(color)
+    return color
+       and color.r > 0.9
+       and color.g < 0.2
+       and color.b < 0.2
 end
 
---Function to scan an item's tooltip for a given string.
-function functions.tooltipHasRedText()
-	for i = 1, LPTLootRoll_ToolTip:NumLines() or 0 do 
-		local left = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextLeft" .. i);
-		local right = getglobal(LPTLootRoll_ToolTip:GetName() .. "TextRight" .. i);
+--Function to check if any text in the tooltip is red
+function functions.tooltipHasRedText(data)
+    if not data or not data.lines then
+        return false
+    end
 
-		local lr, lg, lb = left:GetTextColor()
-		lr = floor(lr * 100 + 0.5) / 100
-		lg = floor(lg * 100 + 0.5) / 100
-		lb = floor(lb * 100 + 0.5) / 100
+    for _, line in ipairs(data.lines) do
+        if isRed(line.leftColor) or isRed(line.rightColor) then
+            return true
+        end
+    end
 
-		local rr, rg, rb = right:GetTextColor();
-		rr = floor(rr * 100 + 0.5) / 100
-		rg = floor(rg * 100 + 0.5) / 100
-		rb = floor(rb * 100 + 0.5) / 100
-
-		if
-			lr == 1 and lg == 0.13 and lb == 0.13 or
-			rr == 1 and rg == 0.13 and rb == 0.13
-		then
-			return true;
-		end
-	end
-
-	return false;
+    return false
 end
+
+
+--Test function for printing out tooltip data
+function functions.printTooltipData(data)
+    if not data or not data.lines then
+        print("No tooltip data.")
+        return
+    end
+
+    for i, line in ipairs(data.lines) do
+        local left  = line.leftText  or ""
+        local right = line.rightText or ""
+
+        local lcol = line.leftColor
+        local rcol = line.rightColor
+
+        local lcolStr = lcol and
+            string.format("LColor: %.3f %.3f %.3f", lcol.r, lcol.g, lcol.b)
+            or "LColor: nil"
+
+        local rcolStr = rcol and
+            string.format("RColor: %.3f %.3f %.3f", rcol.r, rcol.g, rcol.b)
+            or "RColor: nil"
+
+        local typeStr = line.type and tostring(line.type) or "type: nil"
+
+        print(string.format(
+            "[%02d] L:\"%s\" | R:\"%s\" | %s | %s",
+            i, left, right, lcolStr, rcolStr
+        ))
+    end
+end
+
 
 --Function for popping a tradeable item for the pop up of looted items.
 function functions.popTradeable()

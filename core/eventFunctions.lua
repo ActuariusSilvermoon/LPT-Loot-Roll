@@ -22,7 +22,9 @@ variables.events =
     function(...)
         local _, _, item, _, name = ...;
 
+        functions.addBlankLineToDebugHistory();
         if name ~= variables.playerName then
+            functions.addToDebugHistory("Item loot was not for player");
             return;
         end
 
@@ -32,11 +34,13 @@ variables.events =
                     for slot = 1, C_Container.GetContainerNumSlots(bag) do
                         local bagLink = C_Container.GetContainerItemLink(bag, slot);
 
-                        if bagLink and C_Item.GetItemInfo(bagLink) == C_Item.GetItemInfo(item) then
-                            LPTLootRoll_ToolTip:ClearLines();
-                            LPTLootRoll_ToolTip:SetBagItem(bag, slot);
+                        if bagLink == item then
+                            functions.addToDebugHistory("Found correct item in bag");
+                            local tooltipData = C_TooltipInfo.GetContainerItem(bag, slot)
 
-                            if functions.tooltipHasString(trimmedString) then
+                            if functions.tooltipHasString(tooltipData, trimmedString) then
+                                functions.addToDebugHistory("Item has tradeable string");
+                                
                                 tinsert(variables.tradeableItemsQueue, item);
 
                                 if not StaticPopup_Visible("LPTLootRoll_SendTradeable") then
@@ -81,7 +85,6 @@ variables.events =
 
         item:ContinueOnItemLoad(function()
             functions.addToDebugHistory("Raid warning item is loaded.");
-            functions.resetTooltip();
 
             local _, link, _, _, _, _, itemSubType, _, itemEquipLoc, _, _, itemClassID, itemSubClassID = C_Item.GetItemInfo(msg);
 
@@ -94,16 +97,16 @@ variables.events =
             functions.addToDebugHistory("Item: " .. link);
 
             local isPet = itemClassID == 15 and itemSubClassID == 2 or nil;
+            local tooltipData = C_TooltipInfo.GetHyperlink(link)
 
-            LPTLootRoll_ToolTip:SetHyperlink(link);
             local isToken =
                 (
                     itemSubType == "Context Token" or
                     (
                         itemSubType == "Junk" and
                         (
-                            functions.tooltipHasString("Use: Create a soulbound ") or
-                            functions.tooltipHasString("Use: Synthesize a soulbound")
+                            functions.tooltipHasString(tooltipData, "Use: Create a soulbound ") or
+                            functions.tooltipHasString(tooltipData, "Use: Synthesize a soulbound")
                         )
                     )
                 );
@@ -127,7 +130,7 @@ variables.events =
             --Check if item is a collectable transmog piece.
             if usabilityVar == nil then
                 local mogScan = functions.usableMog(link);
-                local mogTooltip = functions.tooltipHasString("You haven't collected this appearance");
+                local mogTooltip = functions.tooltipHasString(tooltipData, "You haven't collected this appearance");
 
                 if mogScan or mogTooltip then
                     if mogScan ~= mogTooltip then
@@ -144,10 +147,7 @@ variables.events =
 
             --Check for red text in tooltip.
             if usabilityVar == nil then
-                functions.resetTooltip();
-                LPTLootRoll_ToolTip:SetHyperlink(link);
-
-                if functions.tooltipHasRedText() then
+                if functions.tooltipHasRedText(tooltipData) then
                     functions.addToDebugHistory("Tooltip contains red text.");
                     usabilityVar = false;
                 --If no red text and is token.
