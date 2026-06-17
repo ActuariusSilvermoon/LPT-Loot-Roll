@@ -185,7 +185,8 @@ end
 
 --Function for calculating scaling value. When scaling for screens with a higher Y resolution than 1200, you have to take parentscale into the account for it to scale properly.
 function functions.calculateScale()
-	local yResolution = tonumber(strmatch(C_CVar.GetCVar("gxWindowedResolution"), "%d+x(%d+)"));
+	--local yResolution = tonumber(strmatch(C_CVar.GetCVar("gxWindowedResolution"), "%d+x(%d+)"));
+	local _, yResolution = GetPhysicalScreenSize();
 	local parentScale = UIParent:GetScale();
 
 	return 768/yResolution/(yResolution > 1200 and parentScale or 1);
